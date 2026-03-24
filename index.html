@@ -1,0 +1,1654 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="BIOHACKER SYSTEMS — Sovereign Health Infrastructure. Advanced peptide cycle tracking for the self-sovereign operator. Your health data, your decisions, your sovereignty.">
+  <meta name="keywords" content="biohacker, peptide tracking, health sovereignty, biomarkers, protocol tracking, self-sovereign health">
+  <meta property="og:title" content="BIOHACKER SYSTEMS — Sovereign Health Infrastructure">
+  <meta property="og:description" content="Your Health. Your Decisions. Your Sovereignty.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://biohacker.systems">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="theme-color" content="#000000">
+  <link rel="canonical" href="https://biohacker.systems">
+  <title>BIOHACKER SYSTEMS // Sovereign Health Infrastructure</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    /* ── RESET ── */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --black:   #000000;
+      --cyan:    #00FFFF;
+      --amber:   #FF9800;
+      --magenta: #FF00FF;
+      --green:   #39FF14;
+      --mono:    'JetBrains Mono', 'Courier New', monospace;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: #000;
+      color: #d8d8d8;
+      font-family: var(--mono);
+      font-size: 15px;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* ── FIXED CANVASES ── */
+    #city-canvas {
+      position: fixed;
+      bottom: 0; left: 0;
+      width: 100%;
+      z-index: 1;
+      image-rendering: pixelated;
+      image-rendering: crisp-edges;
+    }
+
+    #rain-canvas {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    /* ── CRT SCANLINES OVERLAY ── */
+    .crt-lines {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent, transparent 2px,
+        rgba(0,0,0,0.07) 2px, rgba(0,0,0,0.07) 4px
+      );
+      pointer-events: none;
+      z-index: 9000;
+    }
+
+    .crt-vignette {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: radial-gradient(ellipse at center, transparent 55%, rgba(0,0,0,0.5) 100%);
+      pointer-events: none;
+      z-index: 9001;
+    }
+
+    .scanline {
+      position: fixed;
+      top: -200px; left: 0; right: 0;
+      height: 200px;
+      background: linear-gradient(transparent, rgba(0,255,255,0.018) 50%, transparent);
+      animation: scan 8s linear infinite;
+      pointer-events: none;
+      z-index: 9002;
+    }
+    @keyframes scan { 0% { top: -200px; } 100% { top: 110vh; } }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      padding: 10px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: linear-gradient(180deg, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.3) 80%, transparent 100%);
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+      flex-shrink: 0;
+    }
+
+    .nav-logo img {
+      height: 110px;
+      width: auto;
+      display: block;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 28px;
+      align-items: center;
+    }
+
+    .nav-links a {
+      color: #707070;
+      text-decoration: none;
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--cyan); text-shadow: 0 0 10px rgba(0,255,255,0.5); }
+
+    .nav-cta-btn {
+      border: 1px solid rgba(0,255,255,0.4) !important;
+      color: var(--cyan) !important;
+      padding: 6px 14px;
+    }
+    .nav-cta-btn:hover { background: rgba(0,255,255,0.1) !important; }
+
+    /* ── LAYOUT ── */
+    main { position: relative; z-index: 5; }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* ── HERO ── */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: flex-start;
+      padding-top: 150px;
+      padding-bottom: 0;
+      position: relative;
+    }
+
+    .hero-inner {
+      text-align: center;
+      width: 100%;
+      padding-bottom: 48px;
+    }
+
+    .hero-eyebrow {
+      display: inline-block;
+      font-size: 10px;
+      letter-spacing: 4px;
+      color: #444;
+      text-transform: uppercase;
+      margin-bottom: 28px;
+    }
+
+    .hero-title {
+      font-size: clamp(32px, 6vw, 76px);
+      font-weight: 800;
+      line-height: 1.05;
+      letter-spacing: -1px;
+      margin-bottom: 20px;
+      color: #fff;
+    }
+
+    .hero-title .c { color: var(--cyan); text-shadow: 0 0 30px rgba(0,255,255,0.5); }
+    .hero-title .a { color: var(--amber); text-shadow: 0 0 30px rgba(255,152,0,0.5); }
+    .hero-title .m { color: var(--magenta); text-shadow: 0 0 30px rgba(255,0,255,0.5); }
+
+    .hero-sub {
+      font-size: clamp(12px, 1.6vw, 16px);
+      color: #888;
+      max-width: 620px;
+      margin: 0 auto 24px;
+      line-height: 1.9;
+    }
+
+    .hero-tagline {
+      font-size: 11px;
+      color: #3a3a3a;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-top: 8px;
+    }
+
+    /* City spacer */
+    .city-spacer { height: 42vh; }
+
+    /* ── CONTENT SECTIONS ── */
+    .content-section {
+      background: rgba(0,0,0,0.93);
+      padding: 80px 0;
+      border-top: 1px solid rgba(0,255,255,0.08);
+      position: relative;
+      z-index: 5;
+    }
+
+    .section-header {
+      font-size: clamp(16px, 2.5vw, 26px);
+      font-weight: 800;
+      letter-spacing: 5px;
+      color: var(--cyan);
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      text-shadow: 0 0 20px rgba(0,255,255,0.3);
+    }
+
+    .section-sub {
+      font-size: 11px;
+      color: #505050;
+      letter-spacing: 2px;
+      margin-bottom: 48px;
+    }
+
+    /* ── CAPABILITIES (main focus, top position) ── */
+    #capabilities {
+      border-top-color: rgba(255,152,0,0.08);
+    }
+
+    .capabilities-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 24px;
+    }
+
+    .cap-card {
+      background: rgba(0,0,0,0.7);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-top: 2px solid var(--card-accent, var(--cyan));
+      padding: 28px 24px;
+      transition: all 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cap-card:nth-child(1) { --card-accent: var(--cyan);    --card-glow: rgba(0,255,255,0.15); }
+    .cap-card:nth-child(2) { --card-accent: var(--amber);   --card-glow: rgba(255,152,0,0.15); }
+    .cap-card:nth-child(3) { --card-accent: var(--magenta); --card-glow: rgba(255,0,255,0.15); }
+    .cap-card:nth-child(4) { --card-accent: var(--cyan);    --card-glow: rgba(0,255,255,0.15); }
+    .cap-card:nth-child(5) { --card-accent: var(--amber);   --card-glow: rgba(255,152,0,0.15); }
+    .cap-card:nth-child(6) { --card-accent: var(--green);   --card-glow: rgba(57,255,20,0.15); }
+
+    .cap-card:hover {
+      background: rgba(0,0,0,0.85);
+      border-color: var(--card-accent);
+      transform: translateY(-6px);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.6), 0 0 20px var(--card-glow);
+    }
+
+    /* Animation zone */
+    .cap-anim-zone {
+      height: 56px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: visible;
+    }
+
+    /* ── ANIM 1: Peptide Cycle Timeline ── */
+    .anim-cycle {
+      position: relative;
+      width: 220px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+    }
+    .anim-cycle-line {
+      position: absolute;
+      top: 50%; left: 8px; right: 8px;
+      height: 1px;
+      background: rgba(0,255,255,0.2);
+      transform: translateY(-50%);
+    }
+    .anim-cycle-nodes {
+      position: absolute;
+      top: 50%; left: 0; right: 0;
+      transform: translateY(-50%);
+      display: flex;
+      justify-content: space-between;
+      padding: 0 8px;
+    }
+    .anim-cycle-node {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      border: 1px solid rgba(0,255,255,0.35);
+      background: #000;
+      position: relative;
+      z-index: 2;
+    }
+    .anim-cycle-node.active {
+      border-color: var(--cyan);
+      background: rgba(0,255,255,0.15);
+      box-shadow: 0 0 6px rgba(0,255,255,0.6);
+    }
+    .anim-cycle-cursor {
+      position: absolute;
+      top: 50%;
+      width: 12px; height: 12px;
+      border-radius: 50%;
+      background: var(--cyan);
+      box-shadow: 0 0 10px rgba(0,255,255,0.9), 0 0 20px rgba(0,255,255,0.4);
+      transform: translate(-50%, -50%);
+      animation: cycle-sweep 3.5s ease-in-out infinite;
+      z-index: 3;
+    }
+    @keyframes cycle-sweep {
+      0%   { left: 8px; opacity: 1; }
+      85%  { left: calc(100% - 8px); opacity: 1; }
+      90%  { opacity: 0; }
+      91%  { left: 8px; opacity: 0; }
+      100% { left: 8px; opacity: 1; }
+    }
+    .anim-cycle-phases {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      display: flex;
+      justify-content: space-between;
+      padding: 0 4px;
+    }
+    .anim-cycle-phase-lbl {
+      font-size: 7px;
+      letter-spacing: 1px;
+      color: rgba(0,255,255,0.3);
+      text-transform: uppercase;
+    }
+
+    /* ── ANIM 2: Lab Analysis Bars ── */
+    .anim-bars {
+      display: flex;
+      gap: 5px;
+      align-items: flex-end;
+      height: 44px;
+      padding: 0 8px;
+    }
+    .anim-bar {
+      width: 10px;
+      background: linear-gradient(to top, var(--amber), rgba(255,152,0,0.5));
+      border-radius: 1px 1px 0 0;
+      animation: bar-pulse 2.5s ease-in-out infinite alternate;
+    }
+    .anim-bar:nth-child(1) { height: 18px; animation-delay: 0.0s; }
+    .anim-bar:nth-child(2) { height: 34px; animation-delay: 0.15s; }
+    .anim-bar:nth-child(3) { height: 26px; animation-delay: 0.3s; }
+    .anim-bar:nth-child(4) { height: 40px; animation-delay: 0.45s; }
+    .anim-bar:nth-child(5) { height: 22px; animation-delay: 0.6s; }
+    .anim-bar:nth-child(6) { height: 32px; animation-delay: 0.75s; }
+    .anim-bar:nth-child(7) { height: 16px; animation-delay: 0.9s; }
+    @keyframes bar-pulse {
+      0%   { opacity: 0.4; transform: scaleY(0.3); }
+      100% { opacity: 1;   transform: scaleY(1); }
+    }
+    .anim-bars-baseline {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 1px;
+      background: rgba(255,152,0,0.2);
+    }
+
+    /* ── ANIM 3: Protocol Cards Stack ── */
+    .anim-stack {
+      position: relative;
+      width: 100px;
+      height: 50px;
+      perspective: 300px;
+    }
+    .anim-stack-card {
+      position: absolute;
+      width: 80px; height: 38px;
+      border: 1px solid rgba(255,0,255,0.4);
+      background: rgba(255,0,255,0.03);
+      border-radius: 2px;
+      left: 50%; top: 50%;
+    }
+    .anim-stack-card:nth-child(1) {
+      transform: translate(-50%, -50%) rotate(-5deg) translateY(8px) translateX(-4px);
+      z-index: 1;
+      opacity: 0.4;
+    }
+    .anim-stack-card:nth-child(2) {
+      transform: translate(-50%, -50%) rotate(-2deg) translateY(4px);
+      z-index: 2;
+      opacity: 0.65;
+    }
+    .anim-stack-card:nth-child(3) {
+      transform: translate(-50%, -50%) rotate(0deg);
+      z-index: 3;
+      animation: card-top 4s ease-in-out infinite;
+      border-color: rgba(255,0,255,0.8);
+    }
+    .anim-stack-card-lines {
+      padding: 6px 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .anim-stack-line {
+      height: 2px;
+      background: rgba(255,0,255,0.35);
+      border-radius: 1px;
+    }
+    .anim-stack-line:nth-child(1) { width: 60%; }
+    .anim-stack-line:nth-child(2) { width: 90%; }
+    .anim-stack-line:nth-child(3) { width: 75%; }
+    @keyframes card-top {
+      0%, 60%   { transform: translate(-50%, -50%) rotate(0deg); }
+      70%        { transform: translate(-50%, -50%) rotate(0deg) translateY(-14px) scale(1.04); }
+      80%        { transform: translate(-50%, -50%) rotate(2deg) translateY(-10px); }
+      90%        { transform: translate(-50%, -50%) rotate(0deg) translateY(0); }
+      100%       { transform: translate(-50%, -50%) rotate(0deg); }
+    }
+
+    /* ── ANIM 4: Research Study Cards Appearing ── */
+    .anim-studies {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      align-items: flex-end;
+      height: 50px;
+    }
+    .anim-study {
+      width: 52px; height: 40px;
+      border: 1px solid rgba(0,255,255,0.35);
+      background: rgba(0,255,255,0.025);
+      border-radius: 2px;
+      padding: 5px 6px;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      animation: study-rise 4.5s ease-in-out infinite;
+    }
+    .anim-study:nth-child(1) { animation-delay: 0.0s; }
+    .anim-study:nth-child(2) { animation-delay: 0.7s; }
+    .anim-study:nth-child(3) { animation-delay: 1.4s; }
+    .anim-study-ln {
+      height: 2px;
+      background: rgba(0,255,255,0.3);
+      border-radius: 1px;
+    }
+    .anim-study-ln:nth-child(1) { width: 80%; }
+    .anim-study-ln:nth-child(2) { width: 100%; }
+    .anim-study-ln:nth-child(3) { width: 65%; }
+    .anim-study-ln:nth-child(4) { width: 90%; }
+    @keyframes study-rise {
+      0%          { opacity: 0; transform: translateY(16px); }
+      15%, 75%    { opacity: 1; transform: translateY(0); }
+      90%, 100%   { opacity: 0; transform: translateY(-8px); }
+    }
+
+    /* ── ANIM 5: Dose Reminder Bell Pulse ── */
+    .anim-bell-wrap {
+      position: relative;
+      width: 60px; height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .anim-bell-icon {
+      font-size: 26px;
+      position: relative;
+      z-index: 2;
+      animation: bell-shake 3s ease-in-out infinite;
+      filter: drop-shadow(0 0 4px rgba(255,152,0,0.7));
+    }
+    @keyframes bell-shake {
+      0%, 60%, 100% { transform: rotate(0deg); }
+      65%  { transform: rotate(14deg); }
+      70%  { transform: rotate(-12deg); }
+      75%  { transform: rotate(10deg); }
+      80%  { transform: rotate(-8deg); }
+      85%  { transform: rotate(5deg); }
+      90%  { transform: rotate(0deg); }
+    }
+    .anim-bell-ring {
+      position: absolute;
+      top: 50%; left: 50%;
+      border-radius: 50%;
+      border: 1px solid rgba(255,152,0,0.5);
+      animation: bell-ring-expand 3s ease-out infinite;
+      transform: translate(-50%, -50%);
+    }
+    .anim-bell-ring:nth-child(2) { animation-delay: 0s; }
+    .anim-bell-ring:nth-child(3) { animation-delay: 0.4s; }
+    .anim-bell-ring:nth-child(4) { animation-delay: 0.8s; }
+    @keyframes bell-ring-expand {
+      0%   { width: 20px; height: 20px; opacity: 0.8; }
+      60%  { width: 55px; height: 55px; opacity: 0; }
+      100% { width: 55px; height: 55px; opacity: 0; }
+    }
+
+    /* ── ANIM 6: Data Sovereignty Lock ── */
+    .anim-lock-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      height: 56px;
+    }
+    .anim-lock {
+      position: relative;
+      width: 30px;
+    }
+    .anim-lock-shackle {
+      width: 18px; height: 16px;
+      border: 2.5px solid var(--green);
+      border-bottom: none;
+      border-radius: 9px 9px 0 0;
+      margin: 0 auto;
+      position: relative;
+      animation: shackle-close 2.8s ease-in-out infinite;
+      transform-origin: bottom center;
+    }
+    @keyframes shackle-close {
+      0%, 25%  { transform: translateY(-4px); }
+      50%, 100% { transform: translateY(0px); }
+    }
+    .anim-lock-body {
+      width: 30px; height: 22px;
+      border: 2.5px solid var(--green);
+      border-radius: 4px;
+      background: rgba(57,255,20,0.04);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: lock-glow 2.8s ease-in-out infinite;
+    }
+    @keyframes lock-glow {
+      0%, 35% { box-shadow: none; }
+      55%, 85% { box-shadow: 0 0 12px rgba(57,255,20,0.5), inset 0 0 8px rgba(57,255,20,0.1); }
+      100% { box-shadow: none; }
+    }
+    .anim-lock-keyhole {
+      width: 6px; height: 10px;
+      background: rgba(57,255,20,0.5);
+      border-radius: 3px 3px 0 0;
+      position: relative;
+    }
+    .anim-lock-keyhole::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 50%;
+      transform: translateX(-50%);
+      width: 4px; height: 5px;
+      background: rgba(57,255,20,0.5);
+      border-radius: 0 0 2px 2px;
+    }
+
+    /* Capability card text */
+    .cap-title {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2.5px;
+      color: var(--card-accent, var(--cyan));
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    .cap-desc {
+      font-size: 13px;
+      color: #a8a8a8;
+      line-height: 1.75;
+    }
+
+    /* ── WHY WE BUILT THIS ── */
+    .why-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 18px;
+      margin-bottom: 56px;
+    }
+
+    .why-item {
+      background: rgba(0,255,255,0.025);
+      border: 1px solid rgba(0,255,255,0.1);
+      border-left: 3px solid var(--cyan);
+      padding: 26px 28px;
+      transition: all 0.3s;
+    }
+
+    .why-item:hover {
+      background: rgba(0,255,255,0.06);
+      border-color: rgba(0,255,255,0.3);
+      transform: translateX(4px);
+    }
+
+    .why-label {
+      display: block;
+      font-size: 9px;
+      color: var(--green);
+      letter-spacing: 2px;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+    }
+
+    .why-item p {
+      font-size: 14px;
+      line-height: 1.85;
+      color: #c8c8c8;
+    }
+
+    .why-item strong { color: var(--cyan); font-weight: 600; }
+    .why-item .hl { color: var(--amber); }
+
+    .stat-row {
+      display: flex;
+      justify-content: center;
+      gap: 48px;
+      flex-wrap: wrap;
+      padding: 36px 0;
+      border-top: 1px solid rgba(0,255,255,0.1);
+    }
+
+    .stat-item { text-align: center; }
+
+    .stat-value {
+      display: block;
+      font-size: clamp(30px, 5vw, 52px);
+      font-weight: 800;
+      color: var(--cyan);
+      text-shadow: 0 0 24px rgba(0,255,255,0.6);
+      line-height: 1;
+    }
+
+    .stat-label {
+      font-size: 9px;
+      letter-spacing: 2px;
+      color: #555;
+      text-transform: uppercase;
+      margin-top: 6px;
+    }
+
+    /* ── PRINCIPLES ── */
+    #principles {
+      border-top-color: rgba(57,255,20,0.08);
+    }
+
+    .principles-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      max-width: 820px;
+    }
+
+    .principle-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 24px;
+      padding: 22px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      transition: all 0.25s;
+    }
+
+    .principle-row:last-child { border-bottom: none; }
+    .principle-row:hover { padding-left: 8px; }
+
+    .principle-marker {
+      font-size: 10px;
+      color: var(--green);
+      letter-spacing: 1px;
+      flex-shrink: 0;
+      margin-top: 3px;
+      min-width: 32px;
+    }
+
+    .principle-text {
+      font-size: 14px;
+      line-height: 1.8;
+      color: #b8b8b8;
+    }
+
+    .principle-text strong { color: #e8e8e8; font-weight: 600; }
+    .principle-text .note { color: #555; font-size: 12px; }
+
+    /* ── TERMINAL ── */
+    .security-terminal {
+      background: rgba(0,0,0,0.92);
+      border: 1px solid rgba(0,255,255,0.2);
+      font-family: var(--mono);
+      overflow: hidden;
+    }
+
+    .terminal-bar {
+      background: rgba(0,255,255,0.07);
+      border-bottom: 1px solid rgba(0,255,255,0.14);
+      padding: 9px 14px;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .terminal-dot { width: 10px; height: 10px; border-radius: 50%; }
+    .terminal-dot.red    { background: #ff5f56; }
+    .terminal-dot.yellow { background: #ffbd2e; }
+    .terminal-dot.green  { background: #27c93f; }
+    .terminal-title { font-size: 10px; color: #555; letter-spacing: 1px; margin-left: 6px; }
+
+    .terminal-body { padding: 22px 26px; }
+
+    .terminal-line {
+      font-size: 12px;
+      line-height: 2.2;
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .t-prompt { color: var(--green); flex-shrink: 0; }
+    .t-cmd    { color: var(--cyan); }
+    .t-ok     { color: var(--green); }
+    .t-warn   { color: var(--amber); }
+    .t-val    { color: #d0d0d0; }
+
+    .blink-cursor .t-val::after {
+      content: '▊';
+      animation: blink 1s step-end infinite;
+      color: var(--cyan);
+    }
+    @keyframes blink { 50% { opacity: 0; } }
+
+    /* ── DOWNLOAD ── */
+    #download { text-align: center; }
+
+    .download-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 20px;
+      margin-top: 48px;
+      margin-bottom: 32px;
+    }
+
+    .dl-card {
+      border: 1px solid rgba(0,255,255,0.12);
+      padding: 36px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      transition: all 0.3s;
+      background: transparent;
+    }
+
+    .dl-card.active {
+      border-color: rgba(0,255,255,0.4);
+      background: rgba(0,255,255,0.025);
+      box-shadow: 0 0 30px rgba(0,255,255,0.08);
+    }
+
+    .dl-card:hover { transform: translateY(-5px); }
+
+    .dl-icon     { font-size: 36px; }
+    .dl-platform { font-size: 12px; font-weight: 700; letter-spacing: 3px; color: #d8d8d8; text-transform: uppercase; }
+
+    .dl-status { font-size: 10px; letter-spacing: 2px; font-weight: 600; }
+    .dl-status.live    { color: var(--green); }
+    .dl-status.soon    { color: var(--amber); }
+    .dl-status.planned { color: #383838; }
+
+    .btn-dl {
+      display: inline-block;
+      border: 1px solid var(--cyan);
+      color: var(--cyan);
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-decoration: none;
+      padding: 10px 22px;
+      text-transform: uppercase;
+      transition: all 0.2s;
+      box-shadow: 0 0 12px rgba(0,255,255,0.15);
+    }
+
+    .btn-dl:hover { background: rgba(0,255,255,0.12); box-shadow: 0 0 24px rgba(0,255,255,0.3); }
+
+    .dl-note { font-size: 11px; color: #484848; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: rgba(0,0,0,0.96);
+      border-top: 1px solid rgba(0,255,255,0.1);
+      padding: 52px 0 24px;
+      position: relative;
+      z-index: 5;
+    }
+
+    .footer-inner {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 48px;
+      margin-bottom: 32px;
+    }
+
+    .footer-brand { font-size: 17px; font-weight: 800; letter-spacing: 4px; color: var(--cyan); margin-bottom: 6px; text-shadow: 0 0 16px rgba(0,255,255,0.3); }
+    .footer-tagline { font-size: 10px; color: #404040; letter-spacing: 2px; margin-bottom: 18px; }
+
+    .footer-contact { font-size: 11px; color: #555; line-height: 2.1; }
+    .footer-contact a { color: #555; text-decoration: none; transition: color 0.2s; }
+    .footer-contact a:hover { color: var(--cyan); }
+
+    .footer-links {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      align-items: flex-end;
+    }
+
+    .footer-links a {
+      font-size: 10px;
+      letter-spacing: 2px;
+      color: #404040;
+      text-decoration: none;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .footer-links a:hover { color: var(--cyan); }
+
+    .footer-bottom {
+      border-top: 1px solid rgba(255,255,255,0.04);
+      padding-top: 20px;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .footer-copy { font-size: 9px; color: #2e2e2e; letter-spacing: 1px; }
+
+    .footer-signal { font-size: 9px; color: var(--green); letter-spacing: 2px; }
+    .footer-signal::before { content: '● '; animation: blink 2s step-end infinite; }
+
+    /* ── SCROLL FADE-IN ── */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 0.55s ease, transform 0.55s ease;
+    }
+    .fade-in.visible { opacity: 1; transform: none; }
+
+    /* ── MOBILE ── */
+    @media (max-width: 768px) {
+      nav { padding: 8px 14px; }
+      .nav-logo img { height: 72px; }
+      .nav-links { gap: 14px; }
+      .nav-links a { font-size: 9px; letter-spacing: 1px; }
+      .nav-links .nav-cta-btn { display: none; }
+      #hero { padding-top: 110px; }
+      .hero-inner { padding-bottom: 24px; }
+      .content-section { padding: 60px 0; }
+      .why-grid { grid-template-columns: 1fr; }
+      .terminal-body { padding: 14px 16px; }
+      .terminal-line { font-size: 11px; line-height: 2; flex-direction: column; gap: 2px; }
+      .city-spacer { height: 35vh; }
+      .footer-inner { grid-template-columns: 1fr; }
+      .footer-links { align-items: flex-start; }
+      .capabilities-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 480px) {
+      .nav-links { display: none; }
+      .download-cards { grid-template-columns: 1fr; }
+      .stat-row { gap: 28px; }
+      .city-spacer { height: 30vh; }
+    }
+
+    @media (min-width: 1400px) {
+      .nav-logo img { height: 120px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- CRT/Visual overlays -->
+  <div class="crt-lines"></div>
+  <div class="crt-vignette"></div>
+  <div class="scanline"></div>
+
+  <!-- Background canvases (fixed) -->
+  <canvas id="city-canvas"></canvas>
+  <canvas id="rain-canvas"></canvas>
+
+  <!-- ═══ NAVIGATION ═══ -->
+  <nav>
+    <a href="#" class="nav-logo" aria-label="Biohacker Systems">
+      <img src="logo.png" alt="BIOHACKER SYSTEMS Logo">
+    </a>
+    <div class="nav-links">
+      <a href="#capabilities">CAPABILITIES</a>
+      <a href="#why">WHY</a>
+      <a href="#principles">PRINCIPLES</a>
+      <a href="#security">SECURITY</a>
+      <a href="#download" class="nav-cta-btn">GET ACCESS</a>
+    </div>
+  </nav>
+
+  <main>
+
+    <!-- ═══ HERO ═══ -->
+    <section id="hero">
+      <div class="container">
+        <div class="hero-inner">
+          <div class="hero-eyebrow">// BIOHACKER SYSTEMS //</div>
+          <h1 class="hero-title">
+            <span class="c">YOUR</span> HEALTH.<br>
+            <span class="c">YOUR</span> <span class="a">DECISIONS</span>.<br>
+            <span class="c">YOUR</span> <span class="m">SOVEREIGNTY</span>.
+          </h1>
+          <p class="hero-sub">
+            BIOHACKER SYSTEMS provides advanced health tracking infrastructure
+            for sovereign operators. More data, better organization,
+            and the tools to make informed decisions about your own biology.
+          </p>
+          <p class="hero-tagline">Don't trust. Verify. // Self-manage. Optimize. Evolve.</p>
+        </div>
+      </div>
+      <div class="city-spacer"></div>
+    </section>
+
+    <!-- ═══ CAPABILITIES (main section) ═══ -->
+    <section id="capabilities" class="content-section">
+      <div class="container">
+        <h2 class="section-header" style="color: var(--amber); text-shadow: 0 0 20px rgba(255,152,0,0.3);">CAPABILITIES</h2>
+        <p class="section-sub">// What BIOHACKER SYSTEMS Gives You //</p>
+
+        <div class="capabilities-grid">
+
+          <!-- 1. Peptide Cycle Management -->
+          <div class="cap-card fade-in">
+            <div class="cap-anim-zone">
+              <div class="anim-cycle">
+                <div class="anim-cycle-line"></div>
+                <div class="anim-cycle-nodes">
+                  <div class="anim-cycle-node"></div>
+                  <div class="anim-cycle-node active"></div>
+                  <div class="anim-cycle-node active"></div>
+                  <div class="anim-cycle-node"></div>
+                  <div class="anim-cycle-node"></div>
+                </div>
+                <div class="anim-cycle-cursor"></div>
+                <div class="anim-cycle-phases">
+                  <span class="anim-cycle-phase-lbl">LOAD</span>
+                  <span class="anim-cycle-phase-lbl">PEAK</span>
+                  <span class="anim-cycle-phase-lbl">TAPER</span>
+                </div>
+              </div>
+            </div>
+            <h3 class="cap-title">Peptide Cycle Management</h3>
+            <p class="cap-desc">Track complex protocols, dosing schedules, and multi-compound timelines.
+            Pinning logs, cycle analytics, phase transitions. BIOHACKER SYSTEMS handles
+            the complexity so you can focus on the results.</p>
+          </div>
+
+          <!-- 2. Lab Analysis -->
+          <div class="cap-card fade-in">
+            <div class="cap-anim-zone">
+              <div style="position: relative; height: 44px; display: flex; align-items: flex-end;">
+                <div class="anim-bars">
+                  <div class="anim-bar"></div>
+                  <div class="anim-bar"></div>
+                  <div class="anim-bar"></div>
+                  <div class="anim-bar"></div>
+                  <div class="anim-bar"></div>
+                  <div class="anim-bar"></div>
+                  <div class="anim-bar"></div>
+                </div>
+                <div class="anim-bars-baseline"></div>
+              </div>
+            </div>
+            <h3 class="cap-title">Lab Analysis</h3>
+            <p class="cap-desc">Upload bloodwork, track biomarkers over time, visualize trends.
+            IGF-1, hormones, metabolics, inflammation markers.
+            BIOHACKER SYSTEMS turns raw lab data into actionable intelligence.</p>
+          </div>
+
+          <!-- 3. Protocol Library -->
+          <div class="cap-card fade-in">
+            <div class="cap-anim-zone">
+              <div class="anim-stack">
+                <div class="anim-stack-card"></div>
+                <div class="anim-stack-card"></div>
+                <div class="anim-stack-card">
+                  <div class="anim-stack-card-lines">
+                    <div class="anim-stack-line"></div>
+                    <div class="anim-stack-line"></div>
+                    <div class="anim-stack-line"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <h3 class="cap-title">Protocol Library</h3>
+            <p class="cap-desc">Community-driven stacks and research-backed protocols.
+            Browse, fork, and customize. BIOHACKER SYSTEMS aggregates
+            collective knowledge into structured, actionable formats.</p>
+          </div>
+
+          <!-- 4. Research Intelligence -->
+          <div class="cap-card fade-in">
+            <div class="cap-anim-zone">
+              <div class="anim-studies">
+                <div class="anim-study">
+                  <div class="anim-study-ln"></div>
+                  <div class="anim-study-ln"></div>
+                  <div class="anim-study-ln"></div>
+                  <div class="anim-study-ln"></div>
+                </div>
+                <div class="anim-study">
+                  <div class="anim-study-ln"></div>
+                  <div class="anim-study-ln"></div>
+                  <div class="anim-study-ln"></div>
+                  <div class="anim-study-ln"></div>
+                </div>
+                <div class="anim-study">
+                  <div class="anim-study-ln"></div>
+                  <div class="anim-study-ln"></div>
+                  <div class="anim-study-ln"></div>
+                  <div class="anim-study-ln"></div>
+                </div>
+              </div>
+            </div>
+            <h3 class="cap-title">Research Intelligence</h3>
+            <p class="cap-desc">Curated peptide studies, clinical trial data, and mechanism breakdowns.
+            BIOHACKER SYSTEMS filters the signal from the noise —
+            real science, organized for self-managing operators.</p>
+          </div>
+
+          <!-- 5. Dose Reminders -->
+          <div class="cap-card fade-in">
+            <div class="cap-anim-zone">
+              <div class="anim-bell-wrap">
+                <div class="anim-bell-ring"></div>
+                <div class="anim-bell-ring"></div>
+                <div class="anim-bell-ring"></div>
+                <div class="anim-bell-icon">🔔</div>
+              </div>
+            </div>
+            <h3 class="cap-title">Dose Reminders</h3>
+            <p class="cap-desc">Precise dose reminders and cycle milestone alerts.
+            Your schedule, your timing, your control.
+            BIOHACKER SYSTEMS keeps your protocol on track without compromise.</p>
+          </div>
+
+          <!-- 6. Data Sovereignty -->
+          <div class="cap-card fade-in">
+            <div class="cap-anim-zone">
+              <div class="anim-lock-wrap">
+                <div class="anim-lock">
+                  <div class="anim-lock-shackle"></div>
+                  <div class="anim-lock-body">
+                    <div class="anim-lock-keyhole"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <h3 class="cap-title">Data Sovereignty</h3>
+            <p class="cap-desc">Export everything, anytime, in open formats. Delete everything,
+            completely. Secure cloud infrastructure with end-to-end encryption,
+            row-level security, and full export capabilities. Your data obeys you, not us.</p>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ WHY WE BUILT THIS ═══ -->
+    <section id="why" class="content-section">
+      <div class="container">
+        <h2 class="section-header">WHY WE BUILT THIS</h2>
+        <p class="section-sub">// The Case for Health Autonomy //</p>
+
+        <div class="why-grid">
+          <div class="why-item fade-in">
+            <span class="why-label">// Health Autonomy</span>
+            <p>The era of blind deference to external systems is ending.
+            <strong>Health autonomy is rising</strong> — and it demands that
+            <span class="hl">you</span> make the final decisions about your own biology.
+            Not institutions. Not intermediaries. You.</p>
+          </div>
+          <div class="why-item fade-in">
+            <span class="why-label">// The Future of Health</span>
+            <p>BIOHACKER SYSTEMS believes the future is <strong>less reliance on
+            healthcare systems and credentialed gatekeepers</strong> — not more.
+            Self-management, informed by real data, is the path to genuine
+            sovereignty over your own body.</p>
+          </div>
+          <div class="why-item fade-in">
+            <span class="why-label">// Data = Power</span>
+            <p><strong>More data, better organization, and intelligent analysis</strong>
+            unlock your capacity to self-heal, self-optimize, and self-correct.
+            BIOHACKER SYSTEMS provides the infrastructure to accumulate that edge.
+            <span class="hl">Information is the foundation of sovereignty.</span></p>
+          </div>
+          <div class="why-item fade-in">
+            <span class="why-label">// Tools for Operators</span>
+            <p>BIOHACKER SYSTEMS builds <strong>tools for sovereignty, not dependence</strong>.
+            Every feature is designed to reduce reliance on external authorities
+            and increase your own capacity to understand, manage,
+            and optimize your biological systems.</p>
+          </div>
+        </div>
+
+        <div class="stat-row">
+          <div class="stat-item">
+            <span class="stat-value">0</span>
+            <span class="stat-label">Data Sold</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-value">0</span>
+            <span class="stat-label">3rd Party Trackers</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-value">0</span>
+            <span class="stat-label">Ads. Ever.</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-value">∞</span>
+            <span class="stat-label">Export Freedom</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ PRINCIPLES ═══ -->
+    <section id="principles" class="content-section" style="border-top-color: rgba(57,255,20,0.08);">
+      <div class="container">
+        <h2 class="section-header" style="color: var(--green); text-shadow: 0 0 20px rgba(57,255,20,0.3);">PRINCIPLES</h2>
+        <p class="section-sub">// How BIOHACKER SYSTEMS Operates //</p>
+
+        <div class="principles-list">
+          <div class="principle-row fade-in">
+            <span class="principle-marker">▸ 01</span>
+            <p class="principle-text">
+              <strong>Don't trust, verify.</strong>
+              Inspired by the core ethos of sovereign systems — BIOHACKER SYSTEMS is
+              built to be verifiable, not merely trusted. We don't ask for faith;
+              we provide transparency.
+            </p>
+          </div>
+          <div class="principle-row fade-in">
+            <span class="principle-marker">▸ 02</span>
+            <p class="principle-text">
+              <strong>Your health, your decisions, your data.</strong>
+              No external entity — no platform, no provider, no system —
+              has authority over your biological data or the choices you make
+              about your own body. Full stop.
+            </p>
+          </div>
+          <div class="principle-row fade-in">
+            <span class="principle-marker">▸ 03</span>
+            <p class="principle-text">
+              <strong>No ads. Ever.</strong>
+              BIOHACKER SYSTEMS will never sell advertising against your health data.
+              Your biology is not an inventory unit.
+              <span class="note">// Revenue comes from subscriptions and paid tiers — not your attention.</span>
+            </p>
+          </div>
+          <div class="principle-row fade-in">
+            <span class="principle-marker">▸ 04</span>
+            <p class="principle-text">
+              <strong>Transparent data practices.</strong>
+              BIOHACKER SYSTEMS operates on secure cloud infrastructure with
+              end-to-end encryption and row-level security. We may use
+              anonymized, aggregated data for research purposes —
+              this will always be disclosed clearly.
+              <span class="note">// You will always know what is happening with your data.</span>
+            </p>
+          </div>
+          <div class="principle-row fade-in">
+            <span class="principle-marker">▸ 05</span>
+            <p class="principle-text">
+              <strong>Sustainable by design.</strong>
+              BIOHACKER SYSTEMS provides paid tiers and subscriptions
+              to fund ongoing development. Aligned incentives:
+              we succeed when you get real value, not when we maximize engagement.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ SECURITY ═══ -->
+    <section id="security" class="content-section">
+      <div class="container">
+        <h2 class="section-header">SECURITY ARCHITECTURE</h2>
+        <p class="section-sub">// Trust Nothing. Verify Everything. //</p>
+
+        <div class="security-terminal fade-in">
+          <div class="terminal-bar">
+            <div class="terminal-dot red"></div>
+            <div class="terminal-dot yellow"></div>
+            <div class="terminal-dot green"></div>
+            <span class="terminal-title">security_audit.sh — biohacker@sovereign:~$</span>
+          </div>
+          <div class="terminal-body">
+            <div class="terminal-line">
+              <span class="t-prompt">$</span>
+              <span class="t-cmd">check --compliance hipaa</span>
+              <span class="t-warn t-val">[IN PROGRESS] — implementation active</span>
+            </div>
+            <div class="terminal-line">
+              <span class="t-prompt">$</span>
+              <span class="t-cmd">check --isolation row-level-security</span>
+              <span class="t-ok t-val">[✓ ACTIVE] — your data is cryptographically isolated</span>
+            </div>
+            <div class="terminal-line">
+              <span class="t-prompt">$</span>
+              <span class="t-cmd">check --encryption end-to-end</span>
+              <span class="t-ok t-val">[✓ ACTIVE] — encrypted in transit and at rest</span>
+            </div>
+            <div class="terminal-line">
+              <span class="t-prompt">$</span>
+              <span class="t-cmd">scan --third-party-trackers</span>
+              <span class="t-ok t-val">[✓ CLEAN] — zero trackers detected</span>
+            </div>
+            <div class="terminal-line">
+              <span class="t-prompt">$</span>
+              <span class="t-cmd">scan --ads --analytics --telemetry</span>
+              <span class="t-ok t-val">[✓ CLEAN] — none found</span>
+            </div>
+            <div class="terminal-line">
+              <span class="t-prompt">$</span>
+              <span class="t-cmd">verify --data-export full-access</span>
+              <span class="t-ok t-val">[✓ ENABLED] — export everything, anytime, open formats</span>
+            </div>
+            <div class="terminal-line blink-cursor">
+              <span class="t-prompt">$</span>
+              <span class="t-cmd">status --overall</span>
+              <span class="t-ok t-val">[✓ SOVEREIGN] — you are in control</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ DOWNLOAD ═══ -->
+    <section id="download" class="content-section" style="border-top-color: rgba(0,255,255,0.08);">
+      <div class="container">
+        <h2 class="section-header" style="text-align: center;">DEPLOY TO YOUR DEVICE</h2>
+        <p class="section-sub" style="text-align: center;">// BIOHACKER SYSTEMS. Available on your platform. //</p>
+
+        <div class="download-cards">
+          <div class="dl-card active fade-in">
+            <div class="dl-icon">🤖</div>
+            <div class="dl-platform">Android</div>
+            <div class="dl-status live">● LIVE NOW</div>
+            <a href="https://github.com/Wintermute8426/biohacker-flutter/releases/latest"
+               class="btn-dl" target="_blank" rel="noopener">
+              ⬇ DOWNLOAD APK
+            </a>
+            <p class="dl-note">Direct sideload — no app store required</p>
+          </div>
+
+          <div class="dl-card fade-in">
+            <div class="dl-icon">🍎</div>
+            <div class="dl-platform">iOS</div>
+            <div class="dl-status soon">◑ Q2 2026</div>
+            <p class="dl-note">TestFlight beta launching soon</p>
+          </div>
+
+          <div class="dl-card fade-in">
+            <div class="dl-icon">🖥️</div>
+            <div class="dl-platform">Desktop</div>
+            <div class="dl-status planned">○ PLANNED</div>
+            <p class="dl-note">Linux / macOS / Windows</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ═══ FOOTER ═══ -->
+  <footer>
+    <div class="container">
+      <div class="footer-inner">
+        <div>
+          <div class="footer-brand">BIOHACKER SYSTEMS</div>
+          <div class="footer-tagline">// Sovereign Health Infrastructure //</div>
+          <div class="footer-contact">
+            <div>CONTACT: <a href="mailto:team@biohacker.systems">team@biohacker.systems</a></div>
+            <div>DOMAIN: <a href="https://biohacker.systems">biohacker.systems</a></div>
+          </div>
+        </div>
+        <div class="footer-links">
+          <a href="#capabilities">CAPABILITIES</a>
+          <a href="#why">WHY</a>
+          <a href="#principles">PRINCIPLES</a>
+          <a href="#security">SECURITY</a>
+          <a href="#download">GET ACCESS</a>
+          <a href="#">PRIVACY POLICY</a>
+          <a href="#">TERMS OF USE</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span class="footer-copy">© 2026 BIOHACKER SYSTEMS — YOUR HEALTH. YOUR DECISIONS. YOUR DATA.</span>
+        <span class="footer-signal">SIGNAL ACTIVE</span>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+  'use strict';
+
+  /* ═══════════════════════════════════════════════════════════════
+     16-BIT PIXEL CITY
+     Streets-of-Rage style skyline, procedurally generated on canvas
+  ═══════════════════════════════════════════════════════════════ */
+  (function() {
+    const canvas = document.getElementById('city-canvas');
+    const ctx = canvas.getContext('2d');
+    ctx.imageSmoothingEnabled = false;
+
+    // Snap value to pixel grid (P = game pixel size in screen pixels)
+    const P = 3;
+    function snap(v) { return Math.round(v / P) * P; }
+    function rnd(min, max) { return Math.random() * (max - min) + min; }
+    function rndInt(min, max) { return Math.floor(rnd(min, max + 1)); }
+
+    const LAYERS = [
+      {
+        // Far: small dark buildings, barely visible
+        color: '#040712',
+        minH: 0.28, maxH: 0.44,
+        minW: 24,   maxW: 56,
+        winW: 3, winH: 4,
+        winSpX: 9, winSpY: 8,
+        winMarX: 5, winMarY: 6,
+        litColors: ['rgba(0,120,120,0.85)', 'rgba(100,55,0,0.85)'],
+        dimColor: 'rgba(0,0,5,0.9)',
+        litChance: 0.22,
+        neonChance: 0.0,
+        gap: 0,
+      },
+      {
+        // Mid: medium buildings
+        color: '#060b1a',
+        minH: 0.44, maxH: 0.66,
+        minW: 44,   maxW: 88,
+        winW: 5, winH: 6,
+        winSpX: 13, winSpY: 12,
+        winMarX: 8, winMarY: 8,
+        litColors: ['rgba(0,190,190,0.88)', 'rgba(180,95,0,0.88)'],
+        dimColor: 'rgba(0,0,8,0.9)',
+        litChance: 0.28,
+        neonChance: 0.12,
+        gap: 1,
+      },
+      {
+        // Near: large prominent buildings — most visible
+        color: '#090e24',
+        minH: 0.58, maxH: 0.88,
+        minW: 70,   maxW: 150,
+        winW: 7, winH: 9,
+        winSpX: 18, winSpY: 16,
+        winMarX: 11, winMarY: 12,
+        litColors: ['rgba(0,230,230,0.92)', 'rgba(255,148,0,0.90)', 'rgba(220,0,180,0.85)'],
+        dimColor: 'rgba(0,0,12,0.9)',
+        litChance: 0.35,
+        neonChance: 0.22,
+        gap: 2,
+      },
+    ];
+
+    let buildings = [];
+    let blinking  = [];
+
+    function generate() {
+      buildings = [];
+      blinking  = [];
+      const W = canvas.width;
+      const H = canvas.height;
+
+      LAYERS.forEach((L, li) => {
+        let x = -L.maxW;
+        while (x < W + L.maxW) {
+          const bW = snap(rnd(L.minW, L.maxW));
+          const bH = snap(H * rnd(L.minH, L.maxH));
+          const bX = snap(x);
+          const bY = H - bH;
+
+          // Rooftop details (water tower or antenna)
+          const rooftop = [];
+          if (li === 2 && Math.random() < 0.4) {
+            // Water tower: two rects
+            const txW = snap(bW * 0.2);
+            const txH = snap(bH * 0.18);
+            const txX = snap(bX + (bW - txW) / 2);
+            const txY = bY - txH;
+            rooftop.push({ type: 'rect', x: txX, y: txY, w: txW, h: txH, color: '#04060f' });
+            // tank base (slightly wider, 1/3 height)
+            const baseH = snap(txH / 3);
+            rooftop.push({ type: 'rect', x: txX - P, y: txY + txH - baseH, w: txW + P*2, h: baseH, color: '#060816' });
+          }
+          if (li >= 1 && Math.random() < 0.3) {
+            // Antenna: thin tall line
+            const axW = P;
+            const axH = snap(bH * 0.12);
+            const axX = snap(bX + bW * 0.7);
+            rooftop.push({ type: 'rect', x: axX, y: bY - axH, w: axW, h: axH, color: '#050816' });
+          }
+
+          // Neon sign on building face
+          let neonSign = null;
+          if (Math.random() < L.neonChance) {
+            const nsColors = ['rgba(255,0,255,0.9)', 'rgba(0,255,255,0.9)', 'rgba(255,152,0,0.9)'];
+            const nsColor = nsColors[rndInt(0, nsColors.length - 1)];
+            const nsW = snap(bW * rnd(0.3, 0.6));
+            const nsH = snap(bH * rnd(0.04, 0.08));
+            const nsX = snap(bX + (bW - nsW) / 2);
+            const nsY = snap(bY + bH * rnd(0.15, 0.35));
+            neonSign = { x: nsX, y: nsY, w: nsW, h: nsH, color: nsColor };
+          }
+
+          // Windows
+          const windows = [];
+          for (let wy = bY + L.winMarY; wy + L.winH < H - 2; wy += L.winSpY) {
+            for (let wx = bX + L.winMarX; wx + L.winW < bX + bW - L.winMarX; wx += L.winSpX) {
+              const lit = Math.random() < L.litChance;
+              const color = lit
+                ? L.litColors[rndInt(0, L.litColors.length - 1)]
+                : L.dimColor;
+              const win = {
+                x: snap(wx), y: snap(wy),
+                w: L.winW, h: L.winH,
+                lit, color, layerIdx: li,
+                litColors: L.litColors,
+                dimColor: L.dimColor,
+              };
+              windows.push(win);
+              if (lit && Math.random() < 0.12) blinking.push(win);
+            }
+          }
+
+          buildings.push({
+            x: bX, y: bY, w: bW, h: bH,
+            color: L.color,
+            windows, rooftop, neonSign,
+            layerIdx: li,
+          });
+
+          x += bW + snap(rnd(0, L.gap * P));
+        }
+      });
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Draw layers back-to-front
+      for (let li = 0; li < LAYERS.length; li++) {
+        buildings.filter(b => b.layerIdx === li).forEach(b => {
+          // Building body
+          ctx.fillStyle = b.color;
+          ctx.fillRect(b.x, b.y, b.w, b.h);
+
+          // Rooftop details
+          b.rooftop.forEach(r => {
+            ctx.fillStyle = r.color;
+            ctx.fillRect(r.x, r.y, r.w, r.h);
+          });
+
+          // Windows
+          b.windows.forEach(w => {
+            ctx.fillStyle = w.color;
+            ctx.fillRect(w.x, w.y, w.w, w.h);
+          });
+
+          // Neon sign (with glow)
+          if (b.neonSign) {
+            const ns = b.neonSign;
+            ctx.save();
+            ctx.shadowColor = ns.color;
+            ctx.shadowBlur = 8;
+            ctx.fillStyle = ns.color;
+            ctx.fillRect(ns.x, ns.y, ns.w, ns.h);
+            ctx.restore();
+          }
+        });
+      }
+
+      // Ground line
+      ctx.fillStyle = '#000';
+      ctx.fillRect(0, canvas.height - P, canvas.width, P);
+    }
+
+    // Blink windows every 120ms
+    function blink() {
+      blinking.forEach(w => {
+        if (Math.random() < 0.018) {
+          w.lit = !w.lit;
+          const L = LAYERS[w.layerIdx];
+          w.color = w.lit
+            ? w.litColors[rndInt(0, w.litColors.length - 1)]
+            : w.dimColor;
+        }
+      });
+      draw();
+    }
+
+    function resize() {
+      canvas.width  = window.innerWidth;
+      canvas.height = Math.round(Math.min(window.innerHeight * 0.44, 420));
+      generate();
+      draw();
+    }
+
+    window.addEventListener('resize', () => {
+      clearTimeout(resize._t);
+      resize._t = setTimeout(resize, 150);
+    });
+
+    resize();
+    setInterval(blink, 120);
+  })();
+
+
+  /* ═══════════════════════════════════════════════════════════════
+     DIGITAL RAIN — ported from biohacker_flutter/widgets/cyberpunk_rain.dart
+     Same algorithm: gradient trail + bright head dot, 75 drops, 100-300 px/s
+  ═══════════════════════════════════════════════════════════════ */
+  (function() {
+    const canvas   = document.getElementById('rain-canvas');
+    const ctx      = canvas.getContext('2d');
+    const COUNT    = 75;
+    const MIN_SPD  = 100;
+    const MAX_SPD  = 300;
+    const OPACITY  = 0.35; // global multiplier (matches Flutter widget.opacity = 0.3)
+
+    let drops    = [];
+    let lastTime = null;
+
+    function initDrops() {
+      drops = [];
+      for (let i = 0; i < COUNT; i++) {
+        drops.push({
+          x:       Math.random() * canvas.width,
+          y:       Math.random() * canvas.height,
+          speed:   MIN_SPD + Math.random() * (MAX_SPD - MIN_SPD),
+          length:  20 + Math.random() * 30,
+          opacity: 0.3 + Math.random() * 0.4,
+        });
+      }
+    }
+
+    function resize() {
+      canvas.width  = window.innerWidth;
+      canvas.height = window.innerHeight;
+      initDrops();
+    }
+
+    function update(dt) {
+      const H = canvas.height;
+      drops.forEach(d => {
+        // Same as RainDrop.update in Dart: y += (speed * dt) / screenHeight * screenHeight
+        d.y += d.speed * dt;
+        if (d.y > H + d.length) {
+          d.y = -d.length;
+          d.x = Math.random() * canvas.width;
+        }
+      });
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      drops.forEach(d => {
+        const x  = d.x;
+        const y  = d.y;
+        const y0 = y - d.length;
+
+        // Gradient: transparent → cyan at midpoint → dimmer at head
+        // Matches Flutter LinearGradient with stops [0.0, 0.5, 1.0]
+        const grad = ctx.createLinearGradient(x, y0, x, y);
+        const a1   = d.opacity * OPACITY;
+        const a2   = a1 * 0.5;
+        grad.addColorStop(0,   `rgba(0,255,255,0)`);
+        grad.addColorStop(0.5, `rgba(0,255,255,${a1.toFixed(3)})`);
+        grad.addColorStop(1.0, `rgba(0,255,255,${a2.toFixed(3)})`);
+
+        ctx.strokeStyle = grad;
+        ctx.lineWidth   = 1.5;
+        ctx.beginPath();
+        ctx.moveTo(x, y0);
+        ctx.lineTo(x, y);
+        ctx.stroke();
+
+        // Bright dot at the head of the drop (matches Flutter dotPaint)
+        const dotA = Math.min(1, d.opacity * OPACITY * 1.5);
+        ctx.fillStyle = `rgba(0,255,255,${dotA.toFixed(3)})`;
+        ctx.beginPath();
+        ctx.arc(x, y, 1.5, 0, Math.PI * 2);
+        ctx.fill();
+      });
+    }
+
+    function loop(ts) {
+      if (lastTime === null) lastTime = ts;
+      const dt = Math.min((ts - lastTime) / 1000, 0.05);
+      lastTime = ts;
+      update(dt);
+      draw();
+      requestAnimationFrame(loop);
+    }
+
+    window.addEventListener('resize', () => {
+      clearTimeout(resize._t);
+      resize._t = setTimeout(resize, 150);
+    });
+
+    resize();
+    requestAnimationFrame(loop);
+  })();
+
+
+  /* ═══════════════════════════════════════════════════════════════
+     SCROLL FADE-IN
+  ═══════════════════════════════════════════════════════════════ */
+  (function() {
+    const els = document.querySelectorAll('.fade-in');
+    if (!('IntersectionObserver' in window)) {
+      els.forEach(el => el.classList.add('visible'));
+      return;
+    }
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach((e, i) => {
+        if (e.isIntersecting) {
+          setTimeout(() => e.target.classList.add('visible'), i * 60);
+          obs.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    els.forEach(el => obs.observe(el));
+  })();
+
+  </script>
+</body>
+</html>
