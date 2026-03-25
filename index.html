@@ -330,6 +330,18 @@
       width: auto;
       object-fit: contain;
       flex-shrink: 0;
+      filter: drop-shadow(0 0 5px rgba(0,255,255,0.5)) brightness(1.2);
+    }
+    @keyframes logo-glow-in {
+      0%   { filter: drop-shadow(0 0 1px rgba(0,255,255,0.1)) brightness(1.0); }
+      50%  { filter: drop-shadow(0 0 16px rgba(0,255,255,1.0)) brightness(1.6); }
+      100% { filter: drop-shadow(0 0 5px rgba(0,255,255,0.5)) brightness(1.2); }
+    }
+    #nav-logo.scrolled #nav-logo-img {
+      animation: logo-glow-in 1.0s ease-out;
+    }
+    #nav-logo:hover #nav-logo-img {
+      filter: drop-shadow(0 0 12px rgba(0,255,255,0.85)) brightness(1.45);
     }
 
     #nav-logo-text {
@@ -1940,15 +1952,15 @@
       {
         // Far layer — faint, dense, low
         id: 0,
-        color: '#030610',
+        color: '#08102a',
         minH: 0.22, maxH: 0.40,
         minW: 20,   maxW: 50,
         winW: 3, winH: 4,
         winSpX: 8, winSpY: 7,
         winMarX: 4, winMarY: 5,
-        litColors: ['rgba(0,100,100,0.8)', 'rgba(80,44,0,0.8)'],
-        dimColor: 'rgba(0,0,4,0.95)',
-        litChance: 0.18,
+        litColors: ['rgba(0,155,155,0.92)', 'rgba(120,68,0,0.92)'],
+        dimColor: 'rgba(0,0,8,0.95)',
+        litChance: 0.28,
         neonChance: 0.0,
         antChance: 0.2,
         gap: 0,
@@ -1957,15 +1969,15 @@
       {
         // Mid-far layer
         id: 1,
-        color: '#050916',
+        color: '#0d1830',
         minH: 0.34, maxH: 0.56,
         minW: 36,   maxW: 72,
         winW: 4, winH: 5,
         winSpX: 11, winSpY: 10,
         winMarX: 6, winMarY: 7,
-        litColors: ['rgba(0,160,160,0.85)', 'rgba(150,78,0,0.85)'],
-        dimColor: 'rgba(0,0,6,0.92)',
-        litChance: 0.22,
+        litColors: ['rgba(0,190,190,0.92)', 'rgba(180,95,0,0.92)'],
+        dimColor: 'rgba(0,0,10,0.92)',
+        litChance: 0.35,
         neonChance: 0.08,
         antChance: 0.3,
         gap: 1,
@@ -1974,15 +1986,15 @@
       {
         // Mid-near layer
         id: 2,
-        color: '#060b1c',
+        color: '#111e38',
         minH: 0.44, maxH: 0.68,
         minW: 48,   maxW: 96,
         winW: 5, winH: 7,
         winSpX: 14, winSpY: 13,
         winMarX: 8, winMarY: 9,
-        litColors: ['rgba(0,200,200,0.9)', 'rgba(200,104,0,0.9)', 'rgba(180,0,160,0.8)'],
-        dimColor: 'rgba(0,0,9,0.92)',
-        litChance: 0.30,
+        litColors: ['rgba(0,215,215,0.92)', 'rgba(215,115,0,0.92)', 'rgba(190,0,170,0.88)'],
+        dimColor: 'rgba(0,0,14,0.92)',
+        litChance: 0.42,
         neonChance: 0.16,
         antChance: 0.4,
         gap: 2,
@@ -1991,15 +2003,15 @@
       {
         // Near layer — large, prominent
         id: 3,
-        color: '#080d22',
+        color: '#152040',
         minH: 0.56, maxH: 0.92,
         minW: 72,   maxW: 160,
         winW: 7, winH: 9,
         winSpX: 18, winSpY: 16,
         winMarX: 11, winMarY: 12,
-        litColors: ['rgba(0,240,240,0.94)', 'rgba(255,150,0,0.92)', 'rgba(230,0,190,0.88)'],
-        dimColor: 'rgba(0,0,12,0.92)',
-        litChance: 0.38,
+        litColors: ['rgba(0,250,250,0.96)', 'rgba(255,165,0,0.94)', 'rgba(240,0,200,0.90)'],
+        dimColor: 'rgba(0,0,18,0.92)',
+        litChance: 0.50,
         neonChance: 0.28,
         antChance: 0.5,
         gap: 3,
@@ -2011,7 +2023,9 @@
     let blinking     = [];
     let neonSigns    = []; // track neons separately for flicker
     let beacons      = []; // antenna tip lights
-    let cityAnimT    = 0;  // time accumulator for moving elements
+    let searchlights = []; // sweeping beams in background
+    let traffic      = []; // street-level moving lights
+    let cityAnimT    = 0;  // time accumulator (ms)
     let targetScrollY = 0;
     let currentScrollY = 0; // lerped for smooth parallax
 
@@ -2122,11 +2136,37 @@
             windows, rooftop, neonSign,
             floorLines,
             layerIdx: L.id,
+            swayPhase: Math.random() * Math.PI * 2,
+            swayAmp: L.id >= 2 ? rnd(0.4, 1.2) : 0,
           });
 
           x += bW + snap(rnd(0, L.gap * P));
         }
       });
+
+      // Searchlights — slow sweeping beams in far background
+      searchlights = [];
+      for (let i = 0; i < 3; i++) {
+        searchlights.push({
+          x:          rnd(W * 0.1, W * 0.9),
+          angle:      rnd(0.3, Math.PI - 0.3),
+          angleSpeed: rnd(0.003, 0.007) * (Math.random() < 0.5 ? 1 : -1),
+          length:     H * rnd(0.55, 0.78),
+          opacity:    rnd(0.045, 0.085),
+        });
+      }
+
+      // Traffic — car headlights / taillights at street level
+      traffic = [];
+      for (let i = 0; i < 14; i++) {
+        const goRight = Math.random() < 0.5;
+        traffic.push({
+          x:     rnd(0, W),
+          y:     H - P - rndInt(0, 1) * P,
+          speed: goRight ? rnd(0.7, 2.0) : -rnd(0.7, 2.0),
+          color: goRight ? 'rgba(255,225,130,0.88)' : 'rgba(255,55,55,0.88)',
+        });
+      }
     }
 
     function draw() {
@@ -2134,13 +2174,32 @@
       const W = canvas.width;
       ctx.clearRect(0, 0, W, H);
 
-      // Draw layers back-to-front with lerped parallax offset
+      // Searchlights — far background, before buildings
+      searchlights.forEach(sl => {
+        const ex = sl.x + Math.sin(sl.angle) * sl.length;
+        const ey = H   - Math.abs(Math.cos(sl.angle)) * sl.length;
+        const grad = ctx.createLinearGradient(sl.x, H, ex, ey);
+        grad.addColorStop(0,   `rgba(0,220,255,${sl.opacity})`);
+        grad.addColorStop(0.6, `rgba(0,220,255,${(sl.opacity * 0.3).toFixed(3)})`);
+        grad.addColorStop(1,   'rgba(0,220,255,0)');
+        ctx.save();
+        ctx.lineWidth   = 20;
+        ctx.strokeStyle = grad;
+        ctx.beginPath();
+        ctx.moveTo(sl.x, H);
+        ctx.lineTo(ex, ey);
+        ctx.stroke();
+        ctx.restore();
+      });
+
+      // Draw layers back-to-front with lerped parallax offset + subtle sway
       for (let li = 0; li < LAYERS.length; li++) {
-        const L         = LAYERS[li];
-        const offsetY   = Math.min(currentScrollY * L.parallax, H * 0.15); // cap at 15% canvas height
+        const L       = LAYERS[li];
+        const offsetY = Math.min(currentScrollY * L.parallax, H * 0.15);
+        const swayX   = li >= 2 ? Math.sin(cityAnimT * 0.00034 + li * 1.4) * 1.5 : 0;
 
         ctx.save();
-        ctx.translate(0, -offsetY);
+        ctx.translate(swayX, -offsetY);
 
         buildings.filter(b => b.layerIdx === li).forEach(b => {
           // Building body
@@ -2175,8 +2234,7 @@
             ctx.shadowBlur  = 10;
             ctx.fillStyle   = ns.color;
             ctx.fillRect(ns.x, ns.y, ns.w, ns.h);
-            // double-draw for intensity
-            ctx.shadowBlur = 20;
+            ctx.shadowBlur  = 22;
             ctx.fillRect(ns.x, ns.y, ns.w, ns.h);
             ctx.restore();
           }
@@ -2185,14 +2243,26 @@
         ctx.restore();
       }
 
-      // Beacon lights (drawn after all layers, on top)
+      // Beacon lights — red blinking antenna tips
       beacons.forEach(b => {
         if (!b.lit) return;
         ctx.save();
-        ctx.shadowColor = 'rgba(255,40,40,0.9)';
-        ctx.shadowBlur  = 6;
-        ctx.fillStyle   = 'rgba(255,60,60,0.95)';
-        ctx.fillRect(b.x, b.y, P, P);
+        ctx.shadowColor = 'rgba(255,30,30,1.0)';
+        ctx.shadowBlur  = 12;
+        ctx.fillStyle   = 'rgba(255,75,75,1.0)';
+        ctx.fillRect(b.x - 1, b.y, P + 2, P + 2);
+        ctx.restore();
+      });
+
+      // Traffic — headlights & taillights at street level
+      traffic.forEach(tc => {
+        const tx = Math.round(tc.x);
+        ctx.save();
+        ctx.shadowColor = tc.color;
+        ctx.shadowBlur  = 8;
+        ctx.fillStyle   = tc.color;
+        ctx.fillRect(tx,         tc.y, P, P);
+        ctx.fillRect(tx + P * 2, tc.y, P, P); // paired lights
         ctx.restore();
       });
 
@@ -2205,9 +2275,9 @@
     let cityNeedsDraw = true;
 
     function blinkCycle() {
-      // Window blinks
+      // Window blinks — more active for city life feel
       blinking.forEach(w => {
-        if (Math.random() < 0.015) {
+        if (Math.random() < 0.025) {
           w.lit   = !w.lit;
           w.color = w.lit
             ? w.litColors[rndInt(0, w.litColors.length - 1)]
@@ -2217,34 +2287,50 @@
 
       // Neon sign flicker
       neonSigns.forEach(ns => {
-        if (Math.random() < 0.008) {
+        if (Math.random() < 0.010) {
           ns.lit = !ns.lit;
         }
         // Rapid stutter effect
-        if (ns.lit && Math.random() < 0.004) {
+        if (ns.lit && Math.random() < 0.005) {
           ns.lit = false;
-          setTimeout(() => { ns.lit = true; }, 60);
+          setTimeout(() => { ns.lit = true; }, 55);
         }
       });
 
-      // Beacon blink (~1Hz)
+      // Beacon blink (~1Hz — flip every ~1.2s on average at 120ms interval)
       beacons.forEach(b => {
-        if (Math.random() < 0.04) b.lit = !b.lit;
+        if (Math.random() < 0.10) b.lit = !b.lit;
       });
 
       cityNeedsDraw = true;
     }
 
-    /* ── RAF DRAW LOOP — smooth parallax ── */
-    function cityRAF() {
+    /* ── RAF DRAW LOOP — smooth parallax + animated elements ── */
+    function cityRAF(ts) {
+      cityAnimT = ts || 0;
+
       // Lerp scroll for smooth parallax
       currentScrollY += (targetScrollY - currentScrollY) * 0.1;
       const scrollDelta = Math.abs(targetScrollY - currentScrollY);
 
-      if (cityNeedsDraw || scrollDelta > 0.5) {
-        draw();
-        cityNeedsDraw = false;
-      }
+      // Update searchlight angles
+      searchlights.forEach(sl => {
+        sl.angle += sl.angleSpeed;
+        // Bounce between ~15° and ~165°
+        if (sl.angle > Math.PI - 0.25 || sl.angle < 0.25) sl.angleSpeed *= -1;
+      });
+
+      // Update traffic positions
+      const W = canvas.width;
+      traffic.forEach(tc => {
+        tc.x += tc.speed;
+        if (tc.x > W + 20) tc.x = -20;
+        else if (tc.x < -20) tc.x = W + 20;
+      });
+
+      // Always redraw — searchlights and traffic need every frame
+      draw();
+      cityNeedsDraw = false;
       requestAnimationFrame(cityRAF);
     }
 
