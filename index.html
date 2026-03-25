@@ -42,7 +42,7 @@
   -->
   <meta http-equiv="Content-Security-Policy" content="
     default-src 'none';
-    script-src 'sha256-BjvoD9m0+uyg/zyqPvYDaP3PVdcybGxfhl4WDVO/zKA=';
+    script-src 'sha256-hKz01WJ8yarYCHFnh11V4/wRddOrnMc2N+Yudy5EaIA=';
     style-src 'unsafe-inline' https://fonts.googleapis.com;
     font-src https://fonts.gstatic.com;
     img-src 'self' data:;
@@ -102,6 +102,14 @@
       image-rendering: pixelated;
       image-rendering: crisp-edges;
       will-change: transform;
+    }
+
+    #sky-canvas {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: 0;
+      pointer-events: none;
     }
 
     #rain-canvas {
@@ -1470,6 +1478,7 @@
   <div class="scanline"></div>
 
   <!-- Background canvases (fixed) -->
+  <canvas id="sky-canvas"></canvas>
   <canvas id="city-canvas"></canvas>
   <canvas id="rain-canvas"></canvas>
 
@@ -2453,6 +2462,120 @@
 
     resize();
     requestAnimationFrame(loop);
+  })();
+
+
+  /* ═══════════════════════════════════════════════════════════════
+     NIGHT SKY CANVAS
+  ═══════════════════════════════════════════════════════════════ */
+  (function() {
+    const canvas = document.getElementById('sky-canvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+
+    // Stars: seeded random positions so they don't regenerate on resize
+    const STAR_COUNT = 220;
+    const stars = [];
+    // simple LCG for deterministic positions
+    let seed = 42;
+    function rand() { seed = (seed * 1664525 + 1013904223) & 0xffffffff; return (seed >>> 0) / 0xffffffff; }
+    for (let i = 0; i < STAR_COUNT; i++) {
+      stars.push({
+        x: rand(),            // fractional 0-1 of canvas width
+        y: rand() * 0.72,     // upper 72% only
+        r: rand() * 0.9 + 0.3,
+        // mix of white and very faint cyan
+        cyan: rand() > 0.7,
+        // stagger twinkle phase
+        phase: rand() * Math.PI * 2,
+        speed: rand() * 0.4 + 0.2,
+      });
+    }
+
+    // Cloud patches: static wispy ovals
+    const CLOUD_COUNT = 18;
+    const clouds = [];
+    for (let i = 0; i < CLOUD_COUNT; i++) {
+      clouds.push({
+        x: rand(),
+        y: rand() * 0.65,
+        rx: rand() * 0.12 + 0.06,   // fractional width
+        ry: rand() * 0.04 + 0.015,  // fractional height
+        a: rand() * 0.055 + 0.018,  // opacity 0.018–0.073
+      });
+    }
+
+    let W = 0, H = 0;
+    function resize() {
+      W = canvas.width  = window.innerWidth;
+      H = canvas.height = window.innerHeight;
+    }
+    resize();
+    window.addEventListener('resize', resize, { passive: true });
+
+    // Scroll-driven opacity: full at top, 0 by ~80% of viewport height
+    let skyOpacity = 1;
+    window.addEventListener('scroll', function() {
+      const t = Math.min(window.scrollY / (window.innerHeight * 0.8), 1);
+      skyOpacity = 1 - t;
+    }, { passive: true });
+
+    let t = 0;
+    function draw(ts) {
+      t = ts * 0.001;
+      if (skyOpacity <= 0) { requestAnimationFrame(draw); return; }
+
+      ctx.globalAlpha = skyOpacity;
+      ctx.clearRect(0, 0, W, H);
+
+      // Sky gradient: deep blue at top → near-black at bottom
+      const grad = ctx.createLinearGradient(0, 0, 0, H);
+      grad.addColorStop(0,    '#020510');
+      grad.addColorStop(0.38, '#010308');
+      grad.addColorStop(0.65, '#010205');
+      grad.addColorStop(1,    '#000000');
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, W, H);
+
+      // Cloud patches (very subtle)
+      for (const c of clouds) {
+        const cx = c.x * W;
+        const cy = c.y * H;
+        const rx = c.rx * W;
+        const ry = c.ry * H;
+        const cg = ctx.createRadialGradient(cx, cy, 0, cx, cy, rx);
+        cg.addColorStop(0,   `rgba(10,18,40,${c.a})`);
+        cg.addColorStop(0.5, `rgba(8,14,30,${c.a * 0.55})`);
+        cg.addColorStop(1,   'rgba(0,0,0,0)');
+        ctx.save();
+        ctx.scale(1, ry / rx);
+        ctx.beginPath();
+        ctx.arc(cx, cy * (rx / ry), rx, 0, Math.PI * 2);
+        ctx.fillStyle = cg;
+        ctx.fill();
+        ctx.restore();
+      }
+
+      // Stars with gentle twinkle
+      for (const s of stars) {
+        const twinkle = 0.35 + 0.65 * (0.5 + 0.5 * Math.sin(t * s.speed + s.phase));
+        const alpha = twinkle * 0.55;
+        if (alpha < 0.02) continue;
+        const sx = s.x * W;
+        const sy = s.y * H;
+        // fade stars out toward bottom of sky zone
+        const yFade = Math.max(0, 1 - sy / (H * 0.65));
+        ctx.globalAlpha = skyOpacity * alpha * yFade;
+        ctx.beginPath();
+        ctx.arc(sx, sy, s.r, 0, Math.PI * 2);
+        ctx.fillStyle = s.cyan ? 'rgba(180,255,255,1)' : 'rgba(220,230,255,1)';
+        ctx.fill();
+      }
+
+      ctx.globalAlpha = 1;
+      requestAnimationFrame(draw);
+    }
+    requestAnimationFrame(draw);
   })();
 
 
