@@ -42,10 +42,10 @@
   -->
   <meta http-equiv="Content-Security-Policy" content="
     default-src 'none';
-    script-src 'sha256-d1y1Y2uWv6UlKWuW3EbL7ZKHlvXniCKGfN5ZbB/ED08=';
+    script-src 'sha256-gRrfGHsYmXae3O2GXhg+FQ4PhqDZ9WfvtsJJ+GrYVfY=';
     style-src 'unsafe-inline' https://fonts.googleapis.com;
     font-src https://fonts.gstatic.com;
-    img-src 'self';
+    img-src 'self' data:;
     connect-src 'none';
     frame-src 'none';
     object-src 'none';
@@ -60,6 +60,7 @@
   <!-- Referrer Policy: only send origin on same-origin requests; no path/query leak -->
   <meta name="referrer" content="strict-origin-when-cross-origin">
 
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%23000'/><text x='50%25' y='55%25' font-size='20' text-anchor='middle' dominant-baseline='middle' fill='%2300FFFF'>&#x1F9E0;</text></svg>">
   <title>BIOHACKER SYSTEMS // Sovereign Health Infrastructure</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
