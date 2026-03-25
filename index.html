@@ -247,7 +247,7 @@
     /* invisible spacer so hero section has height */
     .hero-logo-img {
       width: auto;
-      max-width: 340px;
+      max-width: 450px;
       height: auto;
       display: block;
       margin: 0 auto;
@@ -272,14 +272,15 @@
     }
 
     .hero-logo-display img {
-      width: 340px;
+      width: 450px;
       height: auto;
       display: block;
       filter: saturate(1.6)
               drop-shadow(0 0 8px rgba(0,255,255,0.9))
               drop-shadow(0 0 24px rgba(0,255,255,0.45))
               drop-shadow(0 0 50px rgba(0,255,255,0.15));
-      animation: hero-logo-glow 3s ease-in-out infinite alternate;
+      animation: hero-logo-glow 3s ease-in-out infinite alternate,
+                 hero-logo-pulse 3.5s ease-in-out infinite;
     }
 
     @keyframes hero-logo-glow {
@@ -294,6 +295,11 @@
                 drop-shadow(0 0 40px rgba(0,255,255,0.6))
                 drop-shadow(0 0 70px rgba(0,255,255,0.2));
       }
+    }
+
+    @keyframes hero-logo-pulse {
+      0%, 100% { transform: scale(1.0); }
+      50%       { transform: scale(1.05); }
     }
 
     .hero-logo-display.scrolled {
@@ -1344,7 +1350,7 @@
         align-items: center;
       }
 
-      .hero-logo-display img { width: 260px; }
+      .hero-logo-display img { width: 350px; }
       #nav-logo { gap: 8px; flex: 0 0 auto; }
       #nav-logo-img { height: 26px; }
       #nav-logo-text { font-size: 13px; letter-spacing: 1.5px; }
@@ -1400,7 +1406,7 @@
     }
 
     @media (min-width: 1400px) {
-      .hero-logo-display img { width: 400px; }
+      .hero-logo-display img { width: 540px; }
     }
 
     /* ── REDUCED MOTION ── */
@@ -1468,7 +1474,7 @@
 
   <!-- Hero logo: large PNG centered, fades out on scroll -->
   <div class="hero-logo-display" id="hero-logo-display" aria-hidden="true">
-    <img src="biohacker-systems-logo.png" alt="BIOHACKER SYSTEMS">
+    <img src="biohacker-hero-logo.png" alt="BIOHACKER">
   </div>
 
   <main>
@@ -1478,7 +1484,7 @@
       <div class="container">
         <div class="hero-inner">
           <!-- invisible placeholder preserves layout flow -->
-          <img src="biohacker-systems-logo.png" alt="" class="hero-logo-img" aria-hidden="true">
+          <img src="biohacker-hero-logo.png" alt="" class="hero-logo-img" aria-hidden="true">
         </div>
       </div>
       <div class="scroll-hint" id="scroll-hint">
