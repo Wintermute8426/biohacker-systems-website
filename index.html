@@ -149,7 +149,7 @@
       position: fixed;
       top: 0; left: 0; right: 0;
       z-index: 1000;
-      padding: 20px 28px;
+      padding: 24px 28px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -288,7 +288,7 @@
       flex-direction: row;
       align-items: center;
       gap: 12px;
-      padding: 20px 20px 20px 20px;
+      padding: 24px 20px 24px 20px;
       text-decoration: none;
       opacity: 0;
       pointer-events: none;
@@ -302,7 +302,7 @@
 
     #nav-logo-img {
       display: block;
-      height: 40px;
+      height: 34px;
       width: auto;
       object-fit: contain;
       flex-shrink: 0;
@@ -1003,6 +1003,13 @@
       transform: translateY(1px);
     }
 
+    .btn-dl-disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+      pointer-events: none;
+      border-color: rgba(0,255,255,0.25);
+    }
+
     .dl-note { font-size: 11px; color: #484848; }
 
     /* ── FOOTER ── */
@@ -1316,12 +1323,12 @@
 
       .hero-logo-display img { width: 260px; }
       #nav-logo { padding: 14px; gap: 10px; }
-      #nav-logo-img { height: 36px; }
+      #nav-logo-img { height: 30px; }
       #nav-logo-text { font-size: 15px; letter-spacing: 1.5px; }
 
       .nav-links { gap: 14px; }
       .nav-links a { font-size: 9px; letter-spacing: 1px; }
-      .nav-links .nav-cta-btn { display: none; }
+      nav .nav-cta-btn { display: none; }
       .content-section { padding: 60px 0; }
       .why-grid { grid-template-columns: 1fr; }
       .terminal-body { padding: 14px 16px; }
@@ -1412,8 +1419,8 @@
       <a href="#why">WHY</a>
       <a href="#principles">PRINCIPLES</a>
       <a href="#security">SECURITY</a>
-      <a href="#download" class="nav-cta-btn">GET ACCESS</a>
     </div>
+    <a href="#download" class="nav-cta-btn">GET ACCESS</a>
   </nav>
 
   <!-- Sticky GET APP button (fades in on scroll) -->
@@ -1811,14 +1818,17 @@
         <p class="section-sub fade-in" style="text-align: center;">// BIOHACKER SYSTEMS. Available on your platform. //</p>
 
         <div class="download-cards">
-          <div class="dl-card active fade-in">
+          <div class="dl-card fade-in">
             <div class="dl-icon">🤖</div>
             <div class="dl-platform">Android</div>
-            <div class="dl-status live">● LIVE NOW</div>
+            <div class="dl-status soon">◑ COMING SOON</div>
+            <!-- Download link — uncomment when APK is ready:
             <a href="https://github.com/Wintermute8426/biohacker-flutter/releases/latest"
                class="btn-dl" target="_blank" rel="noopener">
               ⬇ DOWNLOAD APK
             </a>
+            -->
+            <span class="btn-dl btn-dl-disabled" aria-disabled="true">COMING SOON</span>
             <p class="dl-note">Direct sideload — no app store required</p>
           </div>
 
