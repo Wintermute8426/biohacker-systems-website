@@ -42,7 +42,7 @@
   -->
   <meta http-equiv="Content-Security-Policy" content="
     default-src 'none';
-    script-src 'sha256-hKz01WJ8yarYCHFnh11V4/wRddOrnMc2N+Yudy5EaIA=';
+    script-src 'sha256-cx+GoU+6JxserPRQG9EgLaiTc+GqnBytDMzyEg/cT4c=';
     style-src 'unsafe-inline' https://fonts.googleapis.com;
     font-src https://fonts.gstatic.com;
     img-src 'self' data:;
@@ -2474,34 +2474,41 @@
     const ctx = canvas.getContext('2d');
 
     // Stars: seeded random positions so they don't regenerate on resize
-    const STAR_COUNT = 220;
+    const STAR_COUNT = 450;
     const stars = [];
     // simple LCG for deterministic positions
     let seed = 42;
     function rand() { seed = (seed * 1664525 + 1013904223) & 0xffffffff; return (seed >>> 0) / 0xffffffff; }
     for (let i = 0; i < STAR_COUNT; i++) {
+      const isPulsar = rand() > 0.85;
       stars.push({
         x: rand(),            // fractional 0-1 of canvas width
         y: rand() * 0.72,     // upper 72% only
-        r: rand() * 0.9 + 0.3,
+        r: rand() * 1.8 + 0.8,
         // mix of white and very faint cyan
-        cyan: rand() > 0.7,
+        cyan: rand() > 0.6,
         // stagger twinkle phase
         phase: rand() * Math.PI * 2,
-        speed: rand() * 0.4 + 0.2,
+        speed: rand() * 1.2 + 0.6,
+        // some stars pulse dramatically brighter
+        pulse: isPulsar,
+        pulsePhase: rand() * Math.PI * 2,
+        pulseSpeed: rand() * 0.5 + 0.2,
       });
     }
 
-    // Cloud patches: static wispy ovals
-    const CLOUD_COUNT = 18;
+    // Cloud patches: drifting wispy ovals
+    const CLOUD_COUNT = 28;
     const clouds = [];
     for (let i = 0; i < CLOUD_COUNT; i++) {
       clouds.push({
         x: rand(),
         y: rand() * 0.65,
-        rx: rand() * 0.12 + 0.06,   // fractional width
-        ry: rand() * 0.04 + 0.015,  // fractional height
-        a: rand() * 0.055 + 0.018,  // opacity 0.018–0.073
+        rx: rand() * 0.18 + 0.10,   // fractional width (larger)
+        ry: rand() * 0.06 + 0.025,  // fractional height (taller)
+        a: rand() * 0.18 + 0.10,    // opacity 0.10–0.28
+        driftSpeed: rand() * 0.008 + 0.002,
+        driftPhase: rand() * Math.PI * 2,
       });
     }
 
@@ -2528,24 +2535,26 @@
       ctx.globalAlpha = skyOpacity;
       ctx.clearRect(0, 0, W, H);
 
-      // Sky gradient: deep blue at top → near-black at bottom
+      // Sky gradient: vivid deep blue at top → near-black at bottom
       const grad = ctx.createLinearGradient(0, 0, 0, H);
-      grad.addColorStop(0,    '#020510');
-      grad.addColorStop(0.38, '#010308');
-      grad.addColorStop(0.65, '#010205');
+      grad.addColorStop(0,    '#0a1530');
+      grad.addColorStop(0.35, '#07112a');
+      grad.addColorStop(0.60, '#040c1a');
       grad.addColorStop(1,    '#000000');
       ctx.fillStyle = grad;
       ctx.fillRect(0, 0, W, H);
 
-      // Cloud patches (very subtle)
+      // Cloud patches — drifting atmospheric wisps
       for (const c of clouds) {
-        const cx = c.x * W;
+        const driftX = Math.sin(t * c.driftSpeed + c.driftPhase) * 0.015 * W;
+        const cx = c.x * W + driftX;
         const cy = c.y * H;
         const rx = c.rx * W;
         const ry = c.ry * H;
         const cg = ctx.createRadialGradient(cx, cy, 0, cx, cy, rx);
-        cg.addColorStop(0,   `rgba(10,18,40,${c.a})`);
-        cg.addColorStop(0.5, `rgba(8,14,30,${c.a * 0.55})`);
+        cg.addColorStop(0,   `rgba(60,90,180,${c.a})`);
+        cg.addColorStop(0.4, `rgba(30,55,120,${c.a * 0.65})`);
+        cg.addColorStop(0.75,`rgba(15,30,70,${c.a * 0.3})`);
         cg.addColorStop(1,   'rgba(0,0,0,0)');
         ctx.save();
         ctx.scale(1, ry / rx);
@@ -2556,20 +2565,31 @@
         ctx.restore();
       }
 
-      // Stars with gentle twinkle
+      // Stars with bright twinkle and pulsars
       for (const s of stars) {
-        const twinkle = 0.35 + 0.65 * (0.5 + 0.5 * Math.sin(t * s.speed + s.phase));
-        const alpha = twinkle * 0.55;
-        if (alpha < 0.02) continue;
+        const twinkle = 0.5 + 0.5 * Math.sin(t * s.speed + s.phase);
+        let alpha = 0.55 + 0.45 * twinkle;
+        if (s.pulse) {
+          const pulse = 0.5 + 0.5 * Math.sin(t * s.pulseSpeed + s.pulsePhase);
+          alpha = Math.min(1, alpha + pulse * 0.6);
+        }
+        if (alpha < 0.05) continue;
         const sx = s.x * W;
         const sy = s.y * H;
         // fade stars out toward bottom of sky zone
         const yFade = Math.max(0, 1 - sy / (H * 0.65));
-        ctx.globalAlpha = skyOpacity * alpha * yFade;
+        const finalAlpha = skyOpacity * alpha * yFade;
+        ctx.globalAlpha = finalAlpha;
+        // glow for brighter stars
+        if (s.r > 1.5 || s.pulse) {
+          ctx.shadowBlur = s.r * 4;
+          ctx.shadowColor = s.cyan ? 'rgba(140,230,255,0.9)' : 'rgba(200,210,255,0.9)';
+        }
         ctx.beginPath();
         ctx.arc(sx, sy, s.r, 0, Math.PI * 2);
-        ctx.fillStyle = s.cyan ? 'rgba(180,255,255,1)' : 'rgba(220,230,255,1)';
+        ctx.fillStyle = s.cyan ? 'rgba(180,255,255,1)' : 'rgba(230,235,255,1)';
         ctx.fill();
+        ctx.shadowBlur = 0;
       }
 
       ctx.globalAlpha = 1;
