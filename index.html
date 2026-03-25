@@ -191,6 +191,32 @@
     }
     .nav-links a:hover::after { transform: scaleX(1); }
 
+    /* ── HAMBURGER ── */
+    .nav-hamburger {
+      display: none;
+      flex-direction: column;
+      justify-content: space-between;
+      width: 24px;
+      height: 18px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      flex-shrink: 0;
+      z-index: 1001;
+    }
+    .nav-hamburger span {
+      display: block;
+      width: 100%;
+      height: 2px;
+      background: var(--cyan);
+      border-radius: 2px;
+      transition: transform 0.25s ease, opacity 0.25s ease;
+    }
+    nav.nav-open .nav-hamburger span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+    nav.nav-open .nav-hamburger span:nth-child(2) { opacity: 0; }
+    nav.nav-open .nav-hamburger span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+
 
     /* ── LAYOUT ── */
     main { position: relative; z-index: 5; }
@@ -1310,15 +1336,33 @@
 
     /* ── MOBILE ── */
     @media (max-width: 768px) {
-      nav { padding: 14px 14px; display: flex; justify-content: space-between; }
+      nav {
+        padding: 14px 20px;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+      }
 
       .hero-logo-display img { width: 260px; }
-      #nav-logo { gap: 8px; }
-      #nav-logo-img { height: 28px; }
-      #nav-logo-text { font-size: 14px; letter-spacing: 1.5px; }
+      #nav-logo { gap: 8px; flex: 0 0 auto; }
+      #nav-logo-img { height: 26px; }
+      #nav-logo-text { font-size: 13px; letter-spacing: 1.5px; }
 
-      .nav-links { gap: 14px; justify-self: unset; }
-      .nav-links a { font-size: 9px; letter-spacing: 1px; }
+      .nav-hamburger { display: flex; margin-left: auto; }
+
+      .nav-links {
+        display: none;
+        width: 100%;
+        flex-direction: column;
+        gap: 0;
+        order: 3;
+        padding: 8px 0 6px;
+        border-top: 1px solid rgba(0,255,255,0.12);
+        margin-top: 12px;
+        justify-self: unset;
+      }
+      .nav-links a { font-size: 11px; letter-spacing: 2px; padding: 10px 0; }
+      nav.nav-open .nav-links { display: flex; }
       .content-section { padding: 60px 0; }
       .why-grid { grid-template-columns: 1fr; }
       .terminal-body { padding: 14px 16px; }
@@ -1351,7 +1395,6 @@
     }
 
     @media (max-width: 480px) {
-      .nav-links { display: none; }
       .download-cards { grid-template-columns: 1fr; }
     }
 
@@ -1415,6 +1458,11 @@
       <a href="#principles">PRINCIPLES</a>
       <a href="#security">SECURITY</a>
     </div>
+    <button class="nav-hamburger" id="nav-hamburger" aria-label="Open menu" aria-expanded="false">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
   </nav>
 
   <!-- Hero logo: large PNG centered, fades out on scroll -->
@@ -2336,6 +2384,31 @@
     }, { threshold: 0.06, rootMargin: '0px 0px -80px 0px' });
 
     els.forEach(el => obs.observe(el));
+  })();
+
+
+  /* ═══════════════════════════════════════════════════════════════
+     MOBILE HAMBURGER MENU
+  ═══════════════════════════════════════════════════════════════ */
+  (function() {
+    const hamburger = document.getElementById('nav-hamburger');
+    const nav       = document.querySelector('nav');
+    if (!hamburger || !nav) return;
+
+    hamburger.addEventListener('click', function() {
+      const open = nav.classList.toggle('nav-open');
+      hamburger.setAttribute('aria-expanded', open ? 'true' : 'false');
+      hamburger.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+    });
+
+    // Close menu when a nav link is tapped
+    nav.querySelectorAll('.nav-links a').forEach(function(link) {
+      link.addEventListener('click', function() {
+        nav.classList.remove('nav-open');
+        hamburger.setAttribute('aria-expanded', 'false');
+        hamburger.setAttribute('aria-label', 'Open menu');
+      });
+    });
   })();
 
 
