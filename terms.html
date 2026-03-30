@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="BIOHACKER SYSTEMS — Terms of Service. Your health. Your decisions. Your sovereignty.">
+  <meta name="robots" content="index, follow">
+  <title>TERMS OF SERVICE // BIOHACKER SYSTEMS</title>
+  <link rel="icon" type="image/png" href="brain-nav.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600;700;800&display=swap" rel="stylesheet" crossorigin>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --black: #000000;
+      --cyan: #00FFFF;
+      --amber: #FF9800;
+      --green: #39FF14;
+      --red: #FF3333;
+      --mono: 'JetBrains Mono', 'Courier New', monospace;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: #000;
+      color: #d8d8d8;
+      font-family: var(--mono);
+      font-size: 14px;
+      line-height: 1.7;
+      padding: 0;
+      margin: 0;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* CRT EFFECTS */
+    .crt-lines {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.09) 2px, rgba(0,0,0,0.09) 4px);
+      pointer-events: none;
+      z-index: 9000;
+    }
+
+    .crt-vignette {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: radial-gradient(ellipse at center, transparent 45%, rgba(0,0,0,0.65) 100%);
+      pointer-events: none;
+      z-index: 9001;
+    }
+
+    .scanline {
+      position: fixed;
+      top: -220px; left: 0; right: 0;
+      height: 220px;
+      background: linear-gradient(transparent, rgba(0,255,255,0.022) 50%, transparent);
+      animation: scan 9s linear infinite;
+      pointer-events: none;
+      z-index: 9002;
+    }
+    @keyframes scan { 0% { top: -220px; } 100% { top: 110vh; } }
+
+    /* HEADER */
+    header {
+      background: linear-gradient(180deg, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.8) 100%);
+      padding: 40px 20px;
+      border-bottom: 2px solid var(--amber);
+      text-align: center;
+      position: relative;
+      z-index: 10;
+    }
+
+    h1 {
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--amber);
+      text-transform: uppercase;
+      letter-spacing: 4px;
+      text-shadow: 0 0 20px rgba(255,152,0,0.6);
+      margin-bottom: 10px;
+    }
+
+    .subtitle {
+      font-size: 11px;
+      color: #888;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .effective-date {
+      margin-top: 20px;
+      font-size: 12px;
+      color: var(--cyan);
+      font-weight: 600;
+    }
+
+    /* CONTAINER */
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 60px 30px;
+      position: relative;
+      z-index: 10;
+    }
+
+    /* NAV BACK */
+    .back-link {
+      display: inline-block;
+      color: var(--amber);
+      text-decoration: none;
+      font-size: 12px;
+      letter-spacing: 1px;
+      margin-bottom: 40px;
+      transition: all 0.2s ease;
+      border: 1px solid var(--amber);
+      padding: 8px 16px;
+      text-transform: uppercase;
+    }
+    .back-link:hover {
+      background: var(--amber);
+      color: #000;
+      text-shadow: none;
+      box-shadow: 0 0 20px rgba(255,152,0,0.5);
+    }
+
+    /* TYPOGRAPHY */
+    h2 {
+      font-size: 20px;
+      color: var(--amber);
+      margin-top: 50px;
+      margin-bottom: 20px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      border-left: 4px solid var(--amber);
+      padding-left: 15px;
+    }
+
+    h3 {
+      font-size: 16px;
+      color: var(--cyan);
+      margin-top: 30px;
+      margin-bottom: 15px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    p {
+      margin-bottom: 20px;
+      color: #c8c8c8;
+    }
+
+    ul {
+      list-style: none;
+      margin: 20px 0;
+      padding-left: 0;
+    }
+
+    ul li {
+      position: relative;
+      padding-left: 25px;
+      margin-bottom: 10px;
+      color: #c8c8c8;
+    }
+
+    ul li::before {
+      content: '▹';
+      position: absolute;
+      left: 0;
+      color: var(--amber);
+      font-size: 16px;
+    }
+
+    strong {
+      color: var(--cyan);
+      font-weight: 700;
+    }
+
+    .warning {
+      background: rgba(255, 51, 51, 0.1);
+      border-left: 4px solid var(--red);
+      padding: 15px 20px;
+      margin: 25px 0;
+      color: #fff;
+    }
+
+    .info-box {
+      background: rgba(255, 152, 0, 0.05);
+      border: 1px solid var(--amber);
+      padding: 20px;
+      margin: 30px 0;
+      box-shadow: 0 0 15px rgba(255,152,0,0.15);
+    }
+
+    .info-box h4 {
+      color: var(--amber);
+      font-size: 14px;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .caps-block {
+      background: rgba(0,255,255,0.05);
+      border: 1px dashed var(--cyan);
+      padding: 20px;
+      margin: 30px 0;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    /* FOOTER */
+    footer {
+      background: rgba(0,0,0,0.95);
+      padding: 40px 20px;
+      text-align: center;
+      border-top: 2px solid var(--amber);
+      margin-top: 80px;
+      position: relative;
+      z-index: 10;
+    }
+
+    footer p {
+      font-size: 11px;
+      color: #666;
+      margin-bottom: 15px;
+    }
+
+    footer a {
+      color: var(--amber);
+      text-decoration: none;
+      margin: 0 10px;
+      transition: color 0.2s ease;
+    }
+    footer a:hover {
+      color: var(--cyan);
+      text-shadow: 0 0 10px rgba(0,255,255,0.6);
+    }
+
+    /* MOBILE */
+    @media (max-width: 768px) {
+      h1 { font-size: 22px; letter-spacing: 2px; }
+      h2 { font-size: 18px; }
+      h3 { font-size: 14px; }
+      .container { padding: 40px 20px; }
+    }
+  </style>
+</head>
+<body>
+  <!-- CRT Effects -->
+  <div class="crt-lines"></div>
+  <div class="crt-vignette"></div>
+  <div class="scanline"></div>
+
+  <header>
+    <h1>▚ TERMS OF SERVICE ▚</h1>
+    <p class="subtitle">Your Health. Your Decisions. Your Sovereignty.</p>
+    <p class="effective-date">EFFECTIVE DATE: [APP LAUNCH DATE TBD] | LAST UPDATED: MARCH 26, 2026</p>
+  </header>
+
+  <div class="container">
+    <a href="index.html" class="back-link">← BACK TO HOME</a>
+
+    <div class="warning">
+      <strong>⚠ DRAFT STATUS:</strong> This document requires legal review before publication. Consult with legal counsel to ensure compliance with applicable laws and regulations.
+    </div>
+
+    <section>
+      <h2>1. Acceptance of Terms</h2>
+      <p>
+        By accessing or using the <strong>Biohacker mobile application</strong> (the "App"), you agree to be bound by these Terms of Service ("Terms"). If you do not agree to these Terms, do not use the App.
+      </p>
+      <div class="info-box">
+        <p><strong>Operator:</strong> Biohacker Systems ("we," "our," or "us")</p>
+        <p><strong>Contact:</strong> legal@biohacker.systems</p>
+      </div>
+    </section>
+
+    <section>
+      <h2>2. Service Description</h2>
+      <p>Biohacker is a health optimization tool designed to help users:</p>
+      <ul>
+        <li>Track and manage peptide protocols</li>
+        <li>Store and analyze laboratory test results</li>
+        <li>Monitor biomarker trends and health metrics</li>
+        <li>Track protocol cycles and dosing schedules</li>
+        <li>Access curated health and longevity research</li>
+      </ul>
+      <div class="warning">
+        <strong>IMPORTANT:</strong> The App is a personal health tracking tool, <strong>not a medical device or diagnostic service</strong>.
+      </div>
+    </section>
+
+    <section>
+      <h2>3. Eligibility and Account Requirements</h2>
+
+      <h3>3.1 Age Requirement</h3>
+      <p>
+        You must be <strong>18 years of age or older</strong> to use this App. By creating an account, you represent that you meet this requirement.
+      </p>
+
+      <h3>3.2 Account Creation</h3>
+      <ul>
+        <li>You must provide accurate and complete information</li>
+        <li>You are responsible for maintaining the confidentiality of your credentials</li>
+        <li>You are responsible for all activities under your account</li>
+        <li>You must notify us immediately of any unauthorized access</li>
+      </ul>
+
+      <h3>3.3 Account Termination</h3>
+      <p>We reserve the right to suspend or terminate accounts that:</p>
+      <ul>
+        <li>Violate these Terms</li>
+        <li>Engage in fraudulent or illegal activity</li>
+        <li>Compromise the security or integrity of the App</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>4. Medical Disclaimer</h2>
+
+      <h3>4.1 Not Medical Advice</h3>
+      <div class="caps-block">
+        <strong>THE APP DOES NOT PROVIDE MEDICAL ADVICE.</strong> All content, features, and functionality are for informational and tracking purposes only.
+      </div>
+      <ul>
+        <li><strong>Not a Substitute:</strong> The App is not a substitute for professional medical advice, diagnosis, or treatment</li>
+        <li><strong>Consult Professionals:</strong> Always seek the advice of qualified healthcare providers with questions about medical conditions or treatments</li>
+        <li><strong>Emergency Situations:</strong> Never disregard professional medical advice or delay seeking it because of information in the App</li>
+        <li><strong>No Doctor-Patient Relationship:</strong> Use of the App does not create a doctor-patient or healthcare provider relationship</li>
+      </ul>
+
+      <h3>4.2 User Responsibility</h3>
+      <p>You acknowledge and agree that:</p>
+      <ul>
+        <li>You are solely responsible for your health decisions</li>
+        <li>You will consult healthcare professionals before starting, stopping, or modifying any treatment</li>
+        <li>We are not liable for any health outcomes resulting from App use</li>
+        <li>Laboratory results displayed in the App should be reviewed with qualified healthcare providers</li>
+      </ul>
+
+      <h3>4.3 Peptide Protocols</h3>
+      <p>
+        Information about peptide protocols is for <strong>educational purposes only</strong>. Peptides may be:
+      </p>
+      <ul>
+        <li>Prescription medications requiring physician oversight</li>
+        <li>Research chemicals not approved for human use</li>
+        <li>Subject to legal restrictions in your jurisdiction</li>
+      </ul>
+      <div class="warning">
+        You are <strong>solely responsible</strong> for ensuring legal compliance and medical supervision of any protocols you undertake.
+      </div>
+    </section>
+
+    <section>
+      <h2>5. User Obligations</h2>
+      <p>You agree to:</p>
+      <ul>
+        <li>Provide accurate health information to the best of your knowledge</li>
+        <li>Use the App only for lawful purposes</li>
+        <li>Respect intellectual property rights</li>
+        <li>Not attempt to reverse engineer, decompile, or hack the App</li>
+        <li>Not transmit malicious code or interfere with App functionality</li>
+        <li>Not impersonate others or misrepresent your identity</li>
+        <li>Not scrape, data-mine, or systematically extract App content</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>6. Intellectual Property</h2>
+
+      <h3>6.1 App Ownership</h3>
+      <p>
+        The App, including all software, designs, graphics, text, and functionality, is owned by Biohacker Systems and protected by copyright, trademark, and other intellectual property laws.
+      </p>
+
+      <h3>6.2 Your Content</h3>
+      <p>You retain ownership of all health data you input into the App. By using the App, you grant us a limited license to:</p>
+      <ul>
+        <li>Store and process your data to provide App functionality</li>
+        <li>Generate anonymized, aggregated insights (no PHI disclosed)</li>
+        <li>Improve the App based on usage patterns</li>
+      </ul>
+
+      <h3>6.3 Research Content</h3>
+      <p>Research articles, summaries, and educational content in the App are sourced from:</p>
+      <ul>
+        <li>Public domain scientific literature</li>
+        <li>Licensed third-party content</li>
+        <li>Original content created by Biohacker Systems</li>
+      </ul>
+      <p>Unauthorized reproduction or distribution is prohibited.</p>
+    </section>
+
+    <section>
+      <h2>7. Fees and Payment</h2>
+
+      <h3>7.1 Subscription Pricing</h3>
+      <div class="info-box">
+        <h4>FREE 30-DAY TRIAL</h4>
+        <p>New users receive a <strong>30-day free trial</strong> with full premium access.</p>
+        <p>After trial: <strong>$9.99/month</strong> or <strong>$99/year</strong> (save 17%)</p>
+      </div>
+
+      <h3>7.2 Payment Terms</h3>
+      <ul>
+        <li>Payment charged to Google Play or App Store account at trial end</li>
+        <li>Auto-renews unless cancelled 24 hours before period ends</li>
+        <li>Manage or cancel anytime in app store subscriptions</li>
+        <li>No refunds for partial subscription periods</li>
+      </ul>
+
+      <h3>7.3 Refund Policy</h3>
+      <ul>
+        <li>48-hour money-back guarantee (via Google Play/App Store)</li>
+        <li>Cancel anytime during free trial (no charge)</li>
+        <li>Refunds for technical issues considered case-by-case</li>
+        <li>No refunds after 7 days of paid subscription</li>
+        <li>Contact support@biohacker.systems for refund requests</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>8. Privacy and Data Security</h2>
+      <p>
+        Your use of the App is governed by our <a href="privacy.html" style="color: var(--cyan); text-decoration: underline;">Privacy Policy</a>, which is incorporated into these Terms by reference.
+      </p>
+      <p>Key security features:</p>
+      <ul>
+        <li>HIPAA-compliant data handling</li>
+        <li>AES-256 encryption at rest</li>
+        <li>TLS 1.3 encryption in transit</li>
+        <li>Biometric authentication support</li>
+        <li>Session timeout after 15 minutes</li>
+        <li>Data export and deletion rights</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>9. Limitation of Liability</h2>
+      <div class="caps-block">
+        <strong>TO THE FULLEST EXTENT PERMITTED BY LAW:</strong>
+      </div>
+
+      <h3>9.1 No Warranties</h3>
+      <p>
+        THE APP IS PROVIDED "AS IS" WITHOUT WARRANTIES OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING:
+      </p>
+      <ul>
+        <li>Merchantability</li>
+        <li>Fitness for a particular purpose</li>
+        <li>Non-infringement</li>
+        <li>Accuracy or completeness of content</li>
+        <li>Uninterrupted or error-free operation</li>
+      </ul>
+
+      <h3>9.2 Liability Limits</h3>
+      <p>WE SHALL NOT BE LIABLE FOR:</p>
+      <ul>
+        <li>Health outcomes or medical decisions</li>
+        <li>Data loss or corruption</li>
+        <li>Service interruptions or downtime</li>
+        <li>Third-party actions or breaches</li>
+        <li>Indirect, incidental, special, or consequential damages</li>
+        <li>Loss of profits, data, or business opportunities</li>
+      </ul>
+      <div class="warning">
+        <strong>MAXIMUM LIABILITY:</strong> Our total liability shall not exceed the amount you paid us in the 12 months preceding the claim (currently $0 during trial).
+      </div>
+
+      <h3>9.3 Exceptions</h3>
+      <p>
+        Some jurisdictions do not allow limitation of implied warranties or liability for incidental/consequential damages. In such cases, our liability is limited to the maximum extent permitted by law.
+      </p>
+    </section>
+
+    <section>
+      <h2>10. Indemnification</h2>
+      <p>
+        You agree to indemnify and hold harmless Biohacker Systems, its officers, employees, and agents from any claims, damages, losses, or expenses (including legal fees) arising from:
+      </p>
+      <ul>
+        <li>Your use or misuse of the App</li>
+        <li>Your violation of these Terms</li>
+        <li>Your violation of third-party rights</li>
+        <li>Health decisions or outcomes related to App use</li>
+        <li>Inaccurate information you provide</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>11. Termination</h2>
+
+      <h3>11.1 By You</h3>
+      <p>You may terminate your account at any time by:</p>
+      <ul>
+        <li>Using the "Delete Account" feature in the App</li>
+        <li>Emailing legal@biohacker.systems</li>
+      </ul>
+      <div class="warning">
+        Data deletion is <strong>permanent and irreversible</strong>.
+      </div>
+
+      <h3>11.2 By Us</h3>
+      <p>We may suspend or terminate your access immediately if:</p>
+      <ul>
+        <li>You violate these Terms</li>
+        <li>We are required to do so by law</li>
+        <li>We discontinue the App (with 60 days notice)</li>
+      </ul>
+
+      <h3>11.3 Effect of Termination</h3>
+      <p>Upon termination:</p>
+      <ul>
+        <li>Your right to use the App ceases immediately</li>
+        <li>Your data will be deleted per our retention policy</li>
+        <li>Sections 6 (IP), 9 (Liability), 10 (Indemnification), and 12 (Dispute Resolution) survive</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>12. Dispute Resolution</h2>
+
+      <h3>12.1 Governing Law</h3>
+      <p>
+        These Terms are governed by the laws of <strong>[State TBD]</strong>, without regard to conflict of law principles.
+      </p>
+
+      <h3>12.2 Arbitration</h3>
+      <p>
+        Any disputes arising from these Terms or the App shall be resolved through binding arbitration, except:
+      </p>
+      <ul>
+        <li>Small claims court actions</li>
+        <li>Injunctive relief for IP violations</li>
+      </ul>
+      <div class="info-box">
+        <p><strong>Arbitration Rules:</strong> American Arbitration Association (AAA) Consumer Arbitration Rules</p>
+        <p><strong>Location:</strong> [City/State TBD]</p>
+        <p><strong>Fees:</strong> We will cover arbitration fees for claims under $10,000</p>
+      </div>
+
+      <h3>12.3 Class Action Waiver</h3>
+      <p>
+        You agree to resolve disputes individually. <strong>No class actions, class arbitrations, or representative actions are permitted.</strong>
+      </p>
+
+      <h3>12.4 Jurisdiction</h3>
+      <p>
+        If arbitration does not apply, exclusive jurisdiction lies in the state and federal courts of <strong>[Jurisdiction TBD]</strong>.
+      </p>
+    </section>
+
+    <section>
+      <h2>13. Modifications to Terms</h2>
+      <p>We reserve the right to modify these Terms at any time. Changes will be communicated via:</p>
+      <ul>
+        <li>In-app notification</li>
+        <li>Email to registered users</li>
+        <li>Updated "Last Modified" date</li>
+      </ul>
+      <p>
+        <strong>Material changes</strong> take effect 30 days after notice. Continued use after this period constitutes acceptance.
+      </p>
+    </section>
+
+    <section>
+      <h2>14. Miscellaneous</h2>
+
+      <h3>14.1 Entire Agreement</h3>
+      <p>
+        These Terms, together with the Privacy Policy and HIPAA Notice, constitute the entire agreement between you and Biohacker Systems.
+      </p>
+
+      <h3>14.2 Severability</h3>
+      <p>
+        If any provision is found unenforceable, the remaining provisions remain in full effect.
+      </p>
+
+      <h3>14.3 Waiver</h3>
+      <p>
+        Our failure to enforce any provision does not constitute a waiver of that provision.
+      </p>
+
+      <h3>14.4 Assignment</h3>
+      <p>
+        You may not assign these Terms. We may assign them to any successor or affiliate.
+      </p>
+
+      <h3>14.5 Force Majeure</h3>
+      <p>
+        We are not liable for delays or failures due to circumstances beyond our reasonable control (natural disasters, pandemics, cyberattacks, etc.).
+      </p>
+    </section>
+
+    <section>
+      <h2>15. Contact Information</h2>
+      <div class="info-box">
+        <p><strong>Legal Inquiries:</strong> legal@biohacker.systems</p>
+        <p><strong>Privacy Questions:</strong> privacy@biohacker.systems</p>
+        <p><strong>Support:</strong> support@biohacker.systems</p>
+        <p><strong>Mailing Address:</strong> [Physical Address TBD]</p>
+      </div>
+    </section>
+
+    <div style="margin-top: 60px; padding: 30px; background: rgba(0,255,255,0.05); border: 2px solid var(--cyan);">
+      <p style="text-align: center; font-size: 16px; color: var(--cyan); font-weight: 700;">
+        By using the Biohacker App, you acknowledge that you have read, understood, and agree to these Terms of Service.
+      </p>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2026 BIOHACKER SYSTEMS. ALL RIGHTS RESERVED.</p>
+    <p>
+      <a href="index.html">HOME</a> |
+      <a href="privacy.html">PRIVACY POLICY</a> |
+      <a href="terms.html">TERMS OF SERVICE</a>
+    </p>
+    <p style="margin-top: 20px; font-size: 10px; color: #444;">
+      VERSION 1.0 DRAFT | CLASSIFICATION: PUBLIC | STATUS: LEGAL REVIEW REQUIRED
+    </p>
+  </footer>
+</body>
+</html>
